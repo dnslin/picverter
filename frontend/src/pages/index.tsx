@@ -33,7 +33,7 @@ export default function IndexPage() {
   const [isProcessing, setIsProcessing] = useState(false);
 
   const [cropData, setCropData] = useState<{ area: Area; pixels: Area } | null>(
-    null,
+    null
   );
 
   const [outputFormat, setOutputFormat] = useState("jpeg");
@@ -61,7 +61,7 @@ export default function IndexPage() {
       setCropData({ area: croppedArea, pixels: croppedAreaPixels });
     },
 
-    [],
+    []
   );
 
   const handleFormatChange = useCallback((format: string) => {

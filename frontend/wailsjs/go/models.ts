@@ -45,10 +45,13 @@ export namespace main {
 		            for (const key of Object.keys(a)) {
 		                a[key] = new classs(a[key]);
 		            }
+
 		            return a;
 		        }
+
 		        return new classs(a);
 		    }
+
 		    return a;
 		}
 	}

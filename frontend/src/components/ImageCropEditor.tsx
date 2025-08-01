@@ -63,7 +63,7 @@ export default function ImageCropEditor({
     (croppedArea: Area, croppedAreaPixels: Area) => {
       onCropComplete(croppedArea, croppedAreaPixels);
     },
-    [onCropComplete],
+    [onCropComplete]
   );
 
   const handleFormatChange = useCallback(
@@ -73,7 +73,7 @@ export default function ImageCropEditor({
       setFormat(selectedFormat);
       onFormatChange(selectedFormat);
     },
-    [onFormatChange],
+    [onFormatChange]
   );
 
   const handleQualityChange = useCallback(
@@ -83,12 +83,12 @@ export default function ImageCropEditor({
       setQuality(qualityValue);
       onQualityChange(qualityValue);
     },
-    [onQualityChange],
+    [onQualityChange]
   );
 
   const handleAspectChange = useCallback((keys: any) => {
     const selectedKey = Array.from(keys)[0] as string;
-    const selected = aspectRatios.find((ratio) => ratio.key === selectedKey);
+    const selected = aspectRatios.find(ratio => ratio.key === selectedKey);
 
     setAspect(selected?.value || null);
   }, []);
@@ -168,7 +168,7 @@ export default function ImageCropEditor({
                   size="sm"
                   step={0.1}
                   value={zoom}
-                  onChange={(value) =>
+                  onChange={value =>
                     setZoom(Array.isArray(value) ? value[0] : value)
                   }
                 />
@@ -194,7 +194,7 @@ export default function ImageCropEditor({
                   variant="bordered"
                   onSelectionChange={handleAspectChange}
                 >
-                  {aspectRatios.map((ratio) => (
+                  {aspectRatios.map(ratio => (
                     <SelectItem key={ratio.key} className="text-white">
                       {ratio.label}
                     </SelectItem>
@@ -222,7 +222,7 @@ export default function ImageCropEditor({
                   variant="bordered"
                   onSelectionChange={handleFormatChange}
                 >
-                  {supportedFormats.map((fmt) => (
+                  {supportedFormats.map(fmt => (
                     <SelectItem key={fmt.key} className="text-white">
                       {fmt.label}
                     </SelectItem>

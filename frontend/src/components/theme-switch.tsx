@@ -40,7 +40,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         className: clsx(
           "px-px transition-all duration-300 hover:scale-110 cursor-pointer group",
           className,
-          classNames?.base,
+          classNames?.base
         ),
       })}
     >
@@ -65,7 +65,7 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
               "group-data-[selected=true]:bg-transparent",
               "backdrop-blur-sm",
             ],
-            classNames?.wrapper,
+            classNames?.wrapper
           ),
         })}
         whileHover={{ scale: 1.1, rotate: 10 }}
