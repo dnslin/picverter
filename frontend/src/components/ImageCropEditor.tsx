@@ -186,7 +186,7 @@ export default function ImageCropEditor({
                 <Select
                   classNames={{
                     trigger: "bg-zinc-800 border-zinc-600 text-white",
-                    content: "bg-zinc-800 border-zinc-600",
+                    popoverContent: "bg-zinc-800 border-zinc-600",
                   }}
                   defaultSelectedKeys={["free"]}
                   placeholder="选择长宽比"
@@ -214,7 +214,7 @@ export default function ImageCropEditor({
                 <Select
                   classNames={{
                     trigger: "bg-zinc-800 border-zinc-600 text-white",
-                    content: "bg-zinc-800 border-zinc-600",
+                    popoverContent: "bg-zinc-800 border-zinc-600",
                   }}
                   defaultSelectedKeys={["jpeg"]}
                   placeholder="选择格式"
