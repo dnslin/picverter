@@ -1,0 +1,17 @@
+{
+  "$schema": "https://wails.io/schemas/config.v2.json",
+  "name": "picverter",
+  "outputfilename": "picverter",
+  "frontend:install": "pnpm install",
+  "frontend:build": "pnpm build",
+  "frontend:dev:watcher": "pnpm dev",
+  "frontend:dev:serverUrl": "auto",
+  "author": {
+    "name": "dnslin",
+    "email": "i@dnsl.in",
+    "url": "https://github.com/dnslin"
+  },
+  "exclude": [
+    ".vscode"
+  ]
+}

@@ -1,0 +1,8 @@
+build/bin
+build/windows
+build/linux
+node_modules
+frontend/dist
+tasks
+.mcp.json
+.claude
