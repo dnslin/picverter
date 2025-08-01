@@ -60,7 +60,10 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
           <motion.div
             key={isSelected ? "sun" : "moon"}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            className={isSelected ? "text-amber-500" : "text-blue-400"} // 简单的颜色区分
+            className={clsx(
+              "transition-colors duration-300",
+              isSelected ? "text-amber-500" : "text-blue-400"
+            )}
             exit={{ opacity: 0, scale: 0.8 }}
             initial={{ opacity: 0, scale: 0.8 }}
             transition={{

@@ -11,6 +11,73 @@ export default {
   ],
   theme: {
     extend: {
+      animation: {
+        "shimmer-slide": "shimmer-slide var(--speed) ease-in-out infinite alternate",
+        "spin-around": "spin-around calc(var(--speed) * 2) infinite linear",
+        rainbow: "rainbow var(--speed, 2s) ease-in-out infinite",
+        aurora: "aurora 60s ease-in-out infinite",
+        "shiny-text": "shiny-text 8s ease-in-out infinite",
+        "line-shadow": "line-shadow 2s ease-in-out infinite alternate",
+      },
+      keyframes: {
+        "shimmer-slide": {
+          to: {
+            transform: "translate(calc(100cqw - 100%), 0)",
+          },
+        },
+        "spin-around": {
+          "0%": {
+            transform: "translateZ(0) rotate(0)",
+          },
+          "15%, 35%": {
+            transform: "translateZ(0) rotate(90deg)",
+          },
+          "65%, 85%": {
+            transform: "translateZ(0) rotate(270deg)",
+          },
+          "100%": {
+            transform: "translateZ(0) rotate(360deg)",
+          },
+        },
+        rainbow: {
+          "0%": {
+            "background-position": "0% 50%",
+          },
+          "50%": {
+            "background-position": "100% 50%",
+          },
+          "100%": {
+            "background-position": "0% 50%",
+          },
+        },
+        aurora: {
+          "0%": {
+            "background-position": "0% 50%",
+          },
+          "50%": {
+            "background-position": "100% 50%",
+          },
+          "100%": {
+            "background-position": "0% 50%",
+          },
+        },
+        "shiny-text": {
+          "0%, 90%, 100%": {
+            "background-position": "calc(-100% - var(--shiny-width)) 0",
+          },
+          "30%, 60%": {
+            "background-position": "calc(100% + var(--shiny-width)) 0",
+          },
+        },
+        "line-shadow": {
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "100%": {
+            "background-position": "100% 100%",
+          },
+        },
+      },
       colors: {
         // 温暖的白天模式配色
         warm: {
