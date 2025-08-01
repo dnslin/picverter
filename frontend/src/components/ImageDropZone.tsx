@@ -57,6 +57,8 @@ export default function ImageDropZone({
 
       if (file && file.type.startsWith("image/")) {
         onImageSelect(file);
+        // 清空输入框的值，确保可以重复选择相同文件
+        e.target.value = "";
       }
     },
 

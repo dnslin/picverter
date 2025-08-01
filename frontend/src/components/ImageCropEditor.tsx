@@ -103,29 +103,18 @@ export default function ImageCropEditor({
   const [aspect, setAspect] = useState<number | null>(null);
   const [format, setFormat] = useState("jpeg");
   const [quality, setQuality] = useState(90);
-  const [isInitialized, setIsInitialized] = useState(false);
 
   const styles = getThemeStyles(theme);
 
-  // 初始化裁剪框位置和大小
+  // 组件每次挂载时都重新初始化 - 解决重复选择相同图片的问题
   useEffect(() => {
-    if (!isInitialized && imageSrc) {
-      // 重置所有状态到初始值，确保裁剪框正确显示
-      setCrop({ x: 0, y: 0 });
-      setZoom(1);
-      setAspect(null);
-      setFormat("jpeg");
-      setQuality(90);
-      setIsInitialized(true);
-    }
-  }, [imageSrc, isInitialized]);
-
-  // 组件卸载时重置初始化状态
-  useEffect(() => {
-    return () => {
-      setIsInitialized(false);
-    };
-  }, []);
+    // 重置所有状态到初始值，确保裁剪框正确显示
+    setCrop({ x: 0, y: 0 });
+    setZoom(1);
+    setAspect(null);
+    setFormat("jpeg");
+    setQuality(90);
+  }, []); // 空依赖数组，只在组件挂载时执行一次
 
   // 键盘快捷键支持
   useEffect(() => {

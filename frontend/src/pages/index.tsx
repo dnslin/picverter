@@ -578,6 +578,7 @@ export default function IndexPage() {
       <AnimatePresence>
         {showCropEditor && (
           <ImageCropEditor
+            key={imageSrc} // 使用imageSrc作为key，确保每次新图片都重新挂载组件
             imageSrc={imageSrc}
             isProcessing={isProcessing}
             onCancel={handleCancel}
