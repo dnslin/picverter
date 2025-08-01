@@ -6,3 +6,4 @@ frontend/dist
 tasks
 .mcp.json
 .claude
+docs/
