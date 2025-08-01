@@ -13,7 +13,7 @@ import {
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import Logo from "@/components/Logo";
-import { TextAnimate } from "@/components/magicui/text-animate";
+import SimpleTextAnimate from "@/components/SimpleTextAnimate";
 
 export default function DefaultLayout({
   children,
@@ -62,19 +62,18 @@ export default function DefaultLayout({
         >
           <div className="flex items-center gap-3">
             <Logo animated={true} size="md" />
-            <TextAnimate
-              key={animationKey}
-              animation="blurInUp"
-              as="h1"
-              by="character"
-              className="text-xl font-bold"
-              style={{
-                color: theme === "light" ? "#d97706" : "#60a5fa",
-                transition: "color 0.3s ease",
-              }}
-            >
-              PicVerter
-            </TextAnimate>
+            <h1>
+              <SimpleTextAnimate
+                animationKey={animationKey}
+                className="text-xl font-bold"
+                style={{
+                  color: theme === "light" ? "#d97706" : "#60a5fa",
+                  transition: "color 0.3s ease",
+                }}
+              >
+                PicVerter
+              </SimpleTextAnimate>
+            </h1>
           </div>
         </motion.div>
 
