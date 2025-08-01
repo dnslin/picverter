@@ -14,7 +14,6 @@ import (
 
 	"github.com/disintegration/imaging"
 	"golang.org/x/image/bmp"
-	"golang.org/x/image/webp"
 )
 
 // App struct
@@ -129,11 +128,6 @@ func (a *App) saveImage(img image.Image, path string, format string, quality int
 		return gif.Encode(out, img, nil)
 	case "bmp":
 		return bmp.Encode(out, img)
-	case "webp":
-		if quality < 1 || quality > 100 {
-			quality = 90
-		}
-		return webp.Encode(out, img, &webp.Options{Quality: float32(quality)})
 	default:
 		return fmt.Errorf("unsupported format: %s", format)
 	}
@@ -141,5 +135,5 @@ func (a *App) saveImage(img image.Image, path string, format string, quality int
 
 // GetSupportedFormats returns list of supported image formats
 func (a *App) GetSupportedFormats() []string {
-	return []string{"jpeg", "png", "webp", "gif", "bmp"}
+	return []string{"jpeg", "png", "gif", "bmp"}
 }

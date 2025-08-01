@@ -1,5 +1,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
+import { CheckCircle, XCircle, Info, X } from "lucide-react";
 
 interface ToastProps {
   message: string;
@@ -8,7 +9,12 @@ interface ToastProps {
   onClose: () => void;
 }
 
-export default function Toast({ message, type, duration = 3000, onClose }: ToastProps) {
+export default function Toast({
+  message,
+  type,
+  duration = 3000,
+  onClose,
+}: ToastProps) {
   const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
@@ -23,19 +29,22 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
   const typeConfig = {
     success: {
       bg: "bg-emerald-500/90",
-      icon: "✅",
-      border: "border-emerald-400"
+      icon: CheckCircle,
+      border: "border-emerald-400",
+      color: "text-emerald-100",
     },
     error: {
       bg: "bg-red-500/90",
-      icon: "❌", 
-      border: "border-red-400"
+      icon: XCircle,
+      border: "border-red-400",
+      color: "text-red-100",
     },
     info: {
-      bg: "bg-blue-500/90",
-      icon: "ℹ️",
-      border: "border-blue-400"
-    }
+      bg: "bg-violet-500/90",
+      icon: Info,
+      border: "border-violet-400",
+      color: "text-violet-100",
+    },
   };
 
   const config = typeConfig[type];
@@ -44,21 +53,34 @@ export default function Toast({ message, type, duration = 3000, onClose }: Toast
     <AnimatePresence>
       {isVisible && (
         <motion.div
-          initial={{ opacity: 0, y: -50, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: -50, scale: 0.9 }}
-          transition={{ duration: 0.3, ease: "easeOut" }}
-          className={`fixed top-4 right-4 z-50 px-4 py-3 rounded-lg shadow-lg backdrop-blur-sm border ${config.bg} ${config.border} text-white`}
+          animate={{ opacity: 1, y: 0, scale: 1, rotate: 0 }}
+          className={`fixed top-6 right-6 z-50 px-5 py-4 rounded-xl shadow-2xl backdrop-blur-xl border ${config.bg} ${config.border} ${config.color}`}
+          exit={{ opacity: 0, y: -50, scale: 0.9, rotate: 5 }}
+          initial={{ opacity: 0, y: -50, scale: 0.9, rotate: -5 }}
+          transition={{
+            duration: 0.4,
+            ease: "easeOut",
+            type: "spring",
+            stiffness: 100,
+          }}
         >
           <div className="flex items-center gap-3">
-            <span className="text-lg">{config.icon}</span>
-            <span className="font-medium">{message}</span>
-            <button
-              onClick={() => setIsVisible(false)}
-              className="ml-2 text-white/70 hover:text-white transition-colors"
+            <motion.div
+              animate={{ scale: 1 }}
+              initial={{ scale: 0 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
             >
-              ✕
-            </button>
+              <config.icon className="w-5 h-5" />
+            </motion.div>
+            <span className="font-medium">{message}</span>
+            <motion.button
+              className="ml-2 text-white/70 hover:text-white transition-colors p-1 rounded-full hover:bg-white/10"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsVisible(false)}
+            >
+              <X className="w-4 h-4" />
+            </motion.button>
           </div>
         </motion.div>
       )}

@@ -59,13 +59,15 @@ export const WailsAPI = {
     if (window.go?.main?.App?.GetSupportedFormats) {
       return window.go.main.App.GetSupportedFormats();
     }
-    return ["jpeg", "png", "webp", "gif", "bmp"];
+
+    return ["jpeg", "png", "gif", "bmp"];
   },
 
   async greet(name: string): Promise<string> {
     if (window.go?.main?.App?.Greet) {
       return window.go.main.App.Greet(name);
     }
+
     return `Hello ${name}!`;
   },
 };
@@ -74,11 +76,13 @@ export const WailsAPI = {
 export const fileToBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
+
     reader.readAsDataURL(file);
     reader.onload = () => {
       if (typeof reader.result === "string") {
         // Remove the data URL prefix (e.g., "data:image/jpeg;base64,")
         const base64 = reader.result.split(",")[1];
+
         resolve(base64);
       } else {
         reject(new Error("Failed to convert file to base64"));
@@ -87,3 +91,4 @@ export const fileToBase64 = (file: File): Promise<string> => {
     reader.onerror = (error) => reject(error);
   });
 };
+

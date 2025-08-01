@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Button } from "@heroui/react";
-import { ThemeSwitch } from "@/components/theme-switch";
+import { Scissors, FileImage, Settings, Minimize2 } from "lucide-react";
 
 export default function DefaultLayout({
   children,
@@ -8,85 +8,89 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex h-screen bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white overflow-hidden">
+    <div className="relative flex h-screen bg-zinc-950 text-white overflow-hidden">
       {/* Sidebar */}
-      <motion.aside 
-        initial={{ x: -200, opacity: 0 }}
+      <motion.aside
         animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
-        className="w-64 bg-zinc-800/50 backdrop-blur-sm border-r border-zinc-700/50 flex flex-col"
+        className="w-16 bg-zinc-900/90 backdrop-blur-xl border-r border-zinc-800/50 flex flex-col"
+        initial={{ x: -200, opacity: 0 }}
+        transition={{ duration: 0.7, ease: "easeOut" }}
       >
-        {/* App Title */}
-        <motion.div 
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.2 }}
-          className="p-6 border-b border-zinc-700/50"
+        {/* App Logo */}
+        <motion.div
+          animate={{ scale: 1, opacity: 1 }}
+          className="p-4 border-b border-zinc-800/50"
+          initial={{ scale: 0.8, opacity: 0 }}
+          transition={{
+            duration: 0.8,
+            delay: 0.2,
+            type: "spring",
+            stiffness: 100,
+          }}
         >
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-lg flex items-center justify-center">
-              <span className="text-zinc-900 font-bold text-sm">📷</span>
-            </div>
-            <h1 className="text-xl font-bold bg-gradient-to-r from-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              PicVerter
-            </h1>
-          </div>
+          <motion.div
+            className="w-8 h-8 bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 rounded-xl flex items-center justify-center shadow-lg shadow-purple-500/25"
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Scissors className="w-4 h-4 text-white" />
+          </motion.div>
         </motion.div>
 
         {/* Navigation */}
-        <motion.nav 
-          initial={{ y: 20, opacity: 0 }}
+        <motion.nav
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          className="flex-1 p-4 space-y-2"
+          className="flex-1 p-3 space-y-3"
+          initial={{ y: 20, opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.4 }}
         >
-          <NavItem icon="🖼️" label="图片处理" active />
-          <NavItem icon="📁" label="批量处理" />
+          <NavItem active icon={FileImage} />
         </motion.nav>
 
-        {/* Common Functions */}
-        <motion.div 
-          initial={{ y: 20, opacity: 0 }}
+        {/* Settings */}
+        <motion.div
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="p-4 border-t border-zinc-700/50"
+          className="p-3 border-t border-zinc-800/50"
+          initial={{ y: 20, opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.6 }}
         >
-          <div className="text-xs text-zinc-400 mb-3 font-medium tracking-wide">常用功能</div>
-          <div className="grid grid-cols-2 gap-2">
-            <ToolButton icon="📐" label="格式转换" />
-            <ToolButton icon="🔄" label="旋转" />
-            <ToolButton icon="✨" label="调色" />
-            <ToolButton icon="🎨" label="滤镜" />
-          </div>
+          <NavItem icon={Settings} />
         </motion.div>
       </motion.aside>
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col">
         {/* Top Bar */}
-        <motion.header 
-          initial={{ y: -50, opacity: 0 }}
+        <motion.header
           animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="h-14 bg-zinc-800/30 backdrop-blur-sm border-b border-zinc-700/50 flex items-center justify-between px-6"
+          className="h-12 bg-zinc-900/50 backdrop-blur-xl border-b border-zinc-800/50 flex items-center justify-between px-6"
+          initial={{ y: -50, opacity: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
         >
           <div className="flex items-center gap-4">
-            <div className="text-sm text-zinc-400">快速开始</div>
-          </div>
-          <div className="flex items-center gap-3">
-            <ThemeSwitch />
-            <Button 
-              isIconOnly 
-              variant="ghost" 
-              className="text-zinc-400 hover:text-emerald-400 transition-colors"
+            <motion.h1
+              animate={{ x: 0, opacity: 1 }}
+              className="text-lg font-bold bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent"
+              initial={{ x: -20, opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.5 }}
             >
-              ⚙️
+              PicVerter
+            </motion.h1>
+          </div>
+          <div className="flex items-center gap-2">
+            <Button
+              isIconOnly
+              className="text-zinc-400 hover:text-white hover:bg-zinc-800/50 transition-all duration-200"
+              size="sm"
+              variant="light"
+            >
+              <Minimize2 className="w-4 h-4" />
             </Button>
           </div>
         </motion.header>
 
         {/* Content Area */}
-        <main className="flex-1 overflow-auto">
+        <main className="flex-1 overflow-auto bg-gradient-to-br from-zinc-950 via-zinc-900 to-zinc-950">
           {children}
         </main>
       </div>
@@ -94,32 +98,24 @@ export default function DefaultLayout({
   );
 }
 
-function NavItem({ icon, label, active = false }: { icon: string; label: string; active?: boolean }) {
+function NavItem({
+  icon: Icon,
+  active = false,
+}: {
+  icon: any;
+  active?: boolean;
+}) {
   return (
     <motion.div
-      whileHover={{ x: 4, scale: 1.02 }}
-      whileTap={{ scale: 0.98 }}
-      className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-200 ${
-        active 
-          ? 'bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border border-emerald-500/30' 
-          : 'text-zinc-400 hover:text-white hover:bg-zinc-700/50'
+      className={`w-10 h-10 rounded-xl cursor-pointer transition-all duration-300 flex items-center justify-center ${
+        active
+          ? "bg-gradient-to-br from-violet-500/20 to-indigo-500/20 text-violet-400 border border-violet-500/30 shadow-lg shadow-violet-500/10"
+          : "text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800/50"
       }`}
-    >
-      <span className="text-lg">{icon}</span>
-      <span className="font-medium text-sm">{label}</span>
-    </motion.div>
-  );
-}
-
-function ToolButton({ icon, label }: { icon: string; label: string }) {
-  return (
-    <motion.div
-      whileHover={{ scale: 1.05, y: -2 }}
+      whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
-      className="flex flex-col items-center gap-1 p-3 bg-zinc-700/30 hover:bg-zinc-700/50 rounded-lg cursor-pointer transition-all duration-200 border border-zinc-600/30 hover:border-emerald-500/30"
     >
-      <span className="text-lg">{icon}</span>
-      <span className="text-xs text-zinc-400">{label}</span>
+      <Icon className="w-5 h-5" />
     </motion.div>
   );
 }

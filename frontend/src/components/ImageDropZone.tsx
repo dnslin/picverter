@@ -1,13 +1,17 @@
 import { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@heroui/react";
+import { ImagePlus, Upload, Sparkles } from "lucide-react";
 
 interface ImageDropZoneProps {
   onImageSelect: (file: File) => void;
   className?: string;
 }
 
-export default function ImageDropZone({ onImageSelect, className = "" }: ImageDropZoneProps) {
+export default function ImageDropZone({
+  onImageSelect,
+  className = "",
+}: ImageDropZoneProps) {
   const [isDragOver, setIsDragOver] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -21,119 +25,198 @@ export default function ImageDropZone({ onImageSelect, className = "" }: ImageDr
     setIsDragOver(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    
-    const files = Array.from(e.dataTransfer.files);
-    const imageFile = files.find(file => file.type.startsWith('image/'));
-    
-    if (imageFile) {
-      onImageSelect(imageFile);
-    }
-  }, [onImageSelect]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragOver(false);
 
-  const handleFileSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      onImageSelect(file);
-    }
-  }, [onImageSelect]);
+      const files = Array.from(e.dataTransfer.files);
+      const imageFile = files.find((file) => file.type.startsWith("image/"));
+
+      if (imageFile) {
+        onImageSelect(imageFile);
+      }
+    },
+    [onImageSelect],
+  );
+
+  const handleFileSelect = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const file = e.target.files?.[0];
+
+      if (file && file.type.startsWith("image/")) {
+        onImageSelect(file);
+      }
+    },
+    [onImageSelect],
+  );
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
       className={className}
+      initial={{ opacity: 0, y: 20 }}
+      transition={{ duration: 0.5 }}
     >
       <Card
-        onDragOver={handleDragOver}
+        className={`relative min-h-[420px] cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
+          isDragOver
+            ? "border-violet-400 bg-violet-500/10 shadow-2xl shadow-violet-500/20"
+            : "border-zinc-700 bg-zinc-900/40 hover:border-zinc-600 hover:bg-zinc-900/60"
+        }`}
         onDragLeave={handleDragLeave}
+        onDragOver={handleDragOver}
         onDrop={handleDrop}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        className={`relative min-h-[320px] cursor-pointer transition-all duration-300 border-2 border-dashed overflow-hidden ${
-          isDragOver 
-            ? 'border-emerald-400 bg-emerald-500/10' 
-            : 'border-zinc-600 bg-zinc-800/30 hover:border-zinc-500'
-        }`}
       >
         <input
-          type="file"
           accept="image/*"
-          onChange={handleFileSelect}
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+          type="file"
+          onChange={handleFileSelect}
         />
-        
-        <div className="flex flex-col items-center justify-center h-full p-8 text-center">
+
+        <div className="flex flex-col items-center justify-center h-full p-8 text-center relative">
           <AnimatePresence mode="wait">
             {isDragOver ? (
               <motion.div
                 key="drag-over"
-                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ duration: 0.2 }}
                 className="flex flex-col items-center"
+                exit={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                <motion.div 
-                  animate={{ rotate: 360 }}
+                <motion.div
+                  animate={{ rotate: 360, scale: [1, 1.1, 1] }}
+                  className="w-20 h-20 bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-2xl shadow-violet-500/30"
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                  className="w-16 h-16 bg-gradient-to-br from-emerald-400 to-cyan-400 rounded-full flex items-center justify-center mb-4"
                 >
-                  <span className="text-2xl">📷</span>
+                  <Upload className="w-8 h-8 text-white" />
                 </motion.div>
-                <h3 className="text-lg font-semibold text-emerald-400 mb-2">释放以上传图片</h3>
-                <p className="text-zinc-300 text-sm">支持 JPEG, PNG, WebP, GIF, BMP 格式</p>
+                <h3 className="text-xl font-semibold text-violet-400 mb-3">
+                  释放以上传图片
+                </h3>
+                <p className="text-zinc-300 text-sm">
+                  支持 JPEG, PNG, GIF, BMP 格式
+                </p>
               </motion.div>
             ) : (
               <motion.div
                 key="default"
-                initial={{ scale: 0.8, opacity: 0 }}
                 animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ duration: 0.2 }}
                 className="flex flex-col items-center"
+                exit={{ scale: 0.8, opacity: 0 }}
+                initial={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.2 }}
               >
-                <motion.div 
-                  animate={isHovered ? { scale: 1.1, rotate: 5 } : { scale: 1, rotate: 0 }}
-                  transition={{ duration: 0.3, ease: "easeOut" }}
-                  className="w-16 h-16 bg-gradient-to-br from-zinc-600 to-zinc-700 rounded-full flex items-center justify-center mb-4 border border-zinc-500"
+                <motion.div
+                  animate={
+                    isHovered
+                      ? {
+                          scale: 1.1,
+                          y: -10,
+                          rotateY: 15,
+                          rotateX: 5,
+                        }
+                      : {
+                          scale: 1,
+                          y: 0,
+                          rotateY: 0,
+                          rotateX: 0,
+                        }
+                  }
+                  className="w-20 h-20 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center mb-6 border border-zinc-700 shadow-xl relative"
+                  style={{ perspective: 1000 }}
+                  transition={{
+                    duration: 0.5,
+                    ease: "easeOut",
+                    type: "spring",
+                    stiffness: 100,
+                  }}
                 >
-                  <span className="text-2xl">📷</span>
+                  <motion.div
+                    animate={isHovered ? { rotate: 360 } : { rotate: 0 }}
+                    transition={{ duration: 0.8, ease: "easeInOut" }}
+                  >
+                    <ImagePlus className="w-8 h-8 text-zinc-400" />
+                  </motion.div>
+
+                  {/* Floating dots when hovered */}
+                  {isHovered &&
+                    [...Array(4)].map((_, i) => (
+                      <motion.div
+                        key={i}
+                        animate={{
+                          opacity: [0, 1, 0],
+                          scale: [0, 1, 0],
+                          x: Math.cos((i * 90 * Math.PI) / 180) * 30,
+                          y: Math.sin((i * 90 * Math.PI) / 180) * 30,
+                        }}
+                        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-violet-400 rounded-full"
+                        initial={{ opacity: 0, scale: 0 }}
+                        transition={{
+                          duration: 1.5,
+                          repeat: Infinity,
+                          delay: i * 0.1,
+                        }}
+                      />
+                    ))}
                 </motion.div>
-                <h3 className="text-lg font-semibold text-white mb-2">拖拽图片到这里</h3>
-                <p className="text-zinc-400 text-sm mb-4">或点击选择要处理的图片文件</p>
-                
-                <div className="flex flex-wrap justify-center gap-2 text-xs text-zinc-500">
-                  <span className="px-2 py-1 bg-zinc-700/50 rounded">JPEG</span>
-                  <span className="px-2 py-1 bg-zinc-700/50 rounded">PNG</span>
-                  <span className="px-2 py-1 bg-zinc-700/50 rounded">WebP</span>
-                  <span className="px-2 py-1 bg-zinc-700/50 rounded">GIF</span>
-                  <span className="px-2 py-1 bg-zinc-700/50 rounded">BMP</span>
+                <h3 className="text-xl font-semibold text-white mb-3">
+                  拖拽图片到这里
+                </h3>
+                <p className="text-zinc-400 text-sm mb-6">
+                  或点击选择要处理的图片文件
+                </p>
+
+                <div className="flex items-center gap-4 text-xs text-zinc-500">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-3 h-3" />
+                    <span>支持格式</span>
+                  </div>
+                  <div className="flex gap-2">
+                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                      JPEG
+                    </span>
+                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                      PNG
+                    </span>
+                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                      GIF
+                    </span>
+                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                      BMP
+                    </span>
+                  </div>
                 </div>
               </motion.div>
             )}
           </AnimatePresence>
-          
+
           {/* Animated background particles */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {[...Array(6)].map((_, i) => (
+            {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
-                className="absolute w-1 h-1 bg-emerald-400/30 rounded-full"
-                initial={{ x: Math.random() * 400, y: Math.random() * 300, opacity: 0 }}
-                animate={{ 
-                  x: Math.random() * 400, 
-                  y: Math.random() * 300, 
-                  opacity: [0, 1, 0] 
+                animate={{
+                  x: Math.random() * 500,
+                  y: Math.random() * 400,
+                  opacity: [0, 0.7, 0],
+                  scale: [0.5, 1.5, 0.5],
                 }}
-                transition={{ 
-                  duration: 3 + Math.random() * 2, 
-                  repeat: Infinity, 
-                  ease: "linear",
-                  delay: Math.random() * 2
+                className="absolute w-1 h-1 bg-violet-400/20 rounded-full"
+                initial={{
+                  x: Math.random() * 500,
+                  y: Math.random() * 400,
+                  opacity: 0,
+                }}
+                transition={{
+                  duration: 4 + Math.random() * 3,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                  delay: Math.random() * 3,
                 }}
               />
             ))}
