@@ -7,7 +7,6 @@ import { useTheme } from "next-themes";
 
 import MagicProcessing from "./MagicProcessing";
 
-import { ShimmerButton } from "@/components/magicui/shimmer-button";
 import { NumberTicker } from "@/components/magicui/number-ticker";
 
 // Type definitions for react-easy-crop
@@ -462,43 +461,33 @@ export default function ImageCropEditor({
               className={`p-4 xl:p-6 border-t ${theme === "dark" ? "border-zinc-800/50" : "border-gray-200/50"} flex gap-3`}
             >
               <Button
-                className={`flex-1 ${
+                className={`flex-1 h-11 ${
                   theme === "dark"
-                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
-                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
-                }`}
+                    ? "bg-slate-700 hover:bg-slate-600 text-slate-300 hover:text-white border border-slate-600"
+                    : "bg-slate-100 hover:bg-slate-200 text-slate-700 hover:text-slate-900 border border-slate-300"
+                } font-medium transition-all duration-200`}
                 disabled={isProcessing}
+                radius="sm"
                 startContent={<X className="w-4 h-4" />}
-                variant="light"
+                variant="bordered"
                 onPress={onCancel}
               >
                 取消
               </Button>
-              <ShimmerButton
-                background={
+              <Button
+                className={`flex-1 h-11 ${
                   theme === "dark"
-                    ? "linear-gradient(135deg, #7c3aed, #4f46e5)"
-                    : "linear-gradient(135deg, #3b82f6, #1d4ed8)"
-                }
-                className={`flex-1 ${
-                  theme === "dark"
-                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700"
-                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
-                } text-white font-medium shadow-lg ${
-                  theme === "dark"
-                    ? "shadow-violet-500/25"
-                    : "shadow-blue-500/25"
-                }`}
+                    ? "bg-sky-600 hover:bg-sky-700 text-white border border-sky-500"
+                    : "bg-amber-500 hover:bg-amber-600 text-white border border-amber-400"
+                } font-medium transition-all duration-200`}
                 disabled={isProcessing}
-                shimmerColor="#ffffff"
-                shimmerDuration="2s"
-                onClick={onProcess}
+                radius="sm"
+                startContent={<Download className="w-4 h-4" />}
+                variant="bordered"
+                onPress={onProcess}
               >
-                <div className="flex items-center gap-2">
-                  <Download className="w-4 h-4" />
-                  {isProcessing ? "处理中..." : "确认裁剪"}
-                </div>
-              </ShimmerButton>
+                {isProcessing ? "处理中..." : "确认裁剪"}
+              </Button>
             </div>
           </Card>
         </div>
