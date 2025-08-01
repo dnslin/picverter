@@ -109,7 +109,7 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col justify-center items-center min-h-screen p-8 relative overflow-hidden">
+      <div className="flex flex-col justify-center items-center h-[calc(100vh-2rem)] p-4 relative overflow-hidden">
         {/* Floating Decoration Icons */}
         <div className="absolute inset-0 pointer-events-none">
           {[
@@ -161,7 +161,7 @@ export default function IndexPage() {
               scale: [1, 1.1, 1],
               rotate: [0, 180, 360],
             }}
-            className={`absolute top-10 right-20 w-32 h-32 rounded-full opacity-10 ${
+            className={`absolute top-8 right-16 w-24 h-24 rounded-full opacity-10 ${
               theme === "light"
                 ? "bg-gradient-to-br from-orange-400 to-amber-500"
                 : "bg-gradient-to-br from-violet-500 to-purple-600"
@@ -177,7 +177,7 @@ export default function IndexPage() {
               scale: [1, 0.8, 1],
               rotate: [0, -90, 0],
             }}
-            className={`absolute bottom-20 left-16 w-24 h-24 opacity-10 ${
+            className={`absolute bottom-16 left-12 w-20 h-20 opacity-10 ${
               theme === "light"
                 ? "bg-gradient-to-tr from-amber-400 to-yellow-500"
                 : "bg-gradient-to-tr from-indigo-500 to-blue-600"
@@ -193,11 +193,11 @@ export default function IndexPage() {
           />
         </div>
 
-        <div className="w-full max-w-6xl mx-auto flex gap-6 justify-center items-start min-h-[80vh] relative z-10">
+        <div className="w-full h-full flex gap-4 justify-center items-start relative z-10 max-w-none">
           {/* Side Info Panel */}
           <motion.div
             animate={{ x: 0, opacity: 1 }}
-            className={`w-64 p-4 rounded-xl border transition-all duration-500 ${
+            className={`w-52 min-w-[180px] p-3 rounded-xl border transition-all duration-500 ${
               theme === "light"
                 ? "bg-white/50 border-orange-200/50 backdrop-blur-sm"
                 : "bg-zinc-900/50 border-zinc-700/50 backdrop-blur-sm"
@@ -205,7 +205,7 @@ export default function IndexPage() {
             initial={{ x: -50, opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="space-y-6">
+            <div className="space-y-4">
               {/* Processing Stats */}
               <div>
                 <h3
@@ -302,11 +302,11 @@ export default function IndexPage() {
           </motion.div>
 
           {/* Main Content Area */}
-          <div className="flex-1 max-w-4xl flex flex-col justify-center items-center">
+          <div className="flex-1 flex flex-col justify-center items-center h-full">
             {/* Top Status Bar */}
             <motion.div
               animate={{ y: 0, opacity: 1 }}
-              className={`w-full flex justify-between items-center p-4 rounded-xl mb-6 border transition-all duration-500 ${
+              className={`w-full flex justify-between items-center p-3 rounded-xl mb-4 border transition-all duration-500 h-14 ${
                 theme === "light"
                   ? "bg-white/60 border-orange-200/50 backdrop-blur-sm"
                   : "bg-zinc-900/60 border-zinc-700/50 backdrop-blur-sm"
@@ -373,11 +373,12 @@ export default function IndexPage() {
             {/* Main Drop Zone */}
             <motion.div
               animate={{ y: 0, opacity: 1, scale: 1 }}
+              className="flex-1 flex flex-col"
               initial={{ y: 30, opacity: 0, scale: 0.98 }}
               transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
             >
               <ImageDropZone
-                className="w-full"
+                className="w-full flex-1"
                 onImageSelect={handleImageSelect}
               />
             </motion.div>
@@ -385,7 +386,7 @@ export default function IndexPage() {
             {/* Quick Settings Panel */}
             <motion.div
               animate={{ y: 0, opacity: 1 }}
-              className={`w-full p-6 rounded-xl border mt-6 transition-all duration-500 ${
+              className={`w-full p-3 rounded-xl border mt-3 transition-all duration-500 ${
                 theme === "light"
                   ? "bg-white/40 border-orange-200/50 backdrop-blur-sm"
                   : "bg-zinc-900/40 border-zinc-700/50 backdrop-blur-sm"
@@ -393,7 +394,7 @@ export default function IndexPage() {
               initial={{ y: 20, opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              <div className="flex justify-between items-center mb-4">
+              <div className="flex justify-between items-center mb-2">
                 <h3
                   className={`text-sm font-medium ${
                     theme === "light" ? "text-amber-800" : "text-zinc-300"
@@ -417,8 +418,8 @@ export default function IndexPage() {
                 </motion.div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-3">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="space-y-2">
                   <h4
                     className={`text-xs font-medium ${
                       theme === "light" ? "text-amber-700" : "text-zinc-400"
@@ -444,7 +445,7 @@ export default function IndexPage() {
                   </div>
                 </div>
 
-                <div className="space-y-3">
+                <div className="space-y-2">
                   <h4
                     className={`text-xs font-medium ${
                       theme === "light" ? "text-amber-700" : "text-zinc-400"
@@ -470,83 +471,6 @@ export default function IndexPage() {
                   </div>
                 </div>
               </div>
-            </motion.div>
-
-            {/* Quick Info */}
-            <motion.div
-              animate={{ y: 0, opacity: 1 }}
-              className={`mt-8 flex justify-center items-center gap-6 text-sm transition-colors duration-500 ${
-                theme === "light" ? "text-amber-600" : "text-zinc-500"
-              }`}
-              initial={{ y: 20, opacity: 0 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-            >
-              <motion.div
-                className="flex items-center gap-2"
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.7, 1, 0.7],
-                  }}
-                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                    theme === "light" ? "bg-orange-500" : "bg-violet-500"
-                  }`}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0,
-                  }}
-                />
-                <span>高质量处理</span>
-              </motion.div>
-              <motion.div
-                className="flex items-center gap-2"
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.7, 1, 0.7],
-                  }}
-                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                    theme === "light" ? "bg-amber-500" : "bg-indigo-500"
-                  }`}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 0.7,
-                  }}
-                />
-                <span>多格式支持</span>
-              </motion.div>
-              <motion.div
-                className="flex items-center gap-2"
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  animate={{
-                    scale: [1, 1.2, 1],
-                    opacity: [0.7, 1, 0.7],
-                  }}
-                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                    theme === "light" ? "bg-yellow-500" : "bg-purple-500"
-                  }`}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: 1.4,
-                  }}
-                />
-                <span>桌面级体验</span>
-              </motion.div>
             </motion.div>
           </div>
         </div>

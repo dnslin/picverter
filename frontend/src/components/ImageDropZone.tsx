@@ -61,7 +61,7 @@ export default function ImageDropZone({
       transition={{ duration: 0.5 }}
     >
       <Card
-        className={`relative min-h-[420px] h-[420px] cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
+        className={`relative min-h-[360px] flex-1 cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
           isDragOver
             ? theme === "light"
               ? "border-orange-400 bg-orange-500/10 shadow-2xl shadow-orange-500/20"
