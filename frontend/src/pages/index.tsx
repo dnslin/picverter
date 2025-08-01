@@ -8,6 +8,7 @@ import ImageDropZone from "@/components/ImageDropZone";
 import ImageCropEditor from "@/components/ImageCropEditor";
 import Toast from "@/components/Toast";
 import { WailsAPI, fileToBase64, ProcessOptions } from "@/utils/wails";
+import { TextAnimate } from "@/components/magicui/text-animate";
 
 // Type definitions for react-easy-crop
 
@@ -395,13 +396,15 @@ export default function IndexPage() {
                   }}
                 />
 
-                <span
+                <TextAnimate
+                  animation="slideUp"
+                  by="word"
                   className={`text-sm font-medium ${
                     theme === "light" ? "text-gray-800" : "text-gray-300"
                   }`}
                 >
                   图片处理模式
-                </span>
+                </TextAnimate>
               </div>
 
               <div className="flex items-center gap-6 text-xs">

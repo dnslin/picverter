@@ -6,6 +6,9 @@ import { ZoomIn, Crop, Download, X } from "lucide-react";
 
 import MagicProcessing from "./MagicProcessing";
 
+import { ShimmerButton } from "@/components/magicui/shimmer-button";
+import { NumberTicker } from "@/components/magicui/number-ticker";
+
 // Type definitions for react-easy-crop
 interface Area {
   x: number;
@@ -88,7 +91,7 @@ export default function ImageCropEditor({
 
   const handleAspectChange = useCallback((keys: any) => {
     const selectedKey = Array.from(keys)[0] as string;
-    const selected = aspectRatios.find(ratio => ratio.key === selectedKey);
+    const selected = aspectRatios.find((ratio) => ratio.key === selectedKey);
 
     setAspect(selected?.value || null);
   }, []);
@@ -168,7 +171,7 @@ export default function ImageCropEditor({
                   size="sm"
                   step={0.1}
                   value={zoom}
-                  onChange={value =>
+                  onChange={(value) =>
                     setZoom(Array.isArray(value) ? value[0] : value)
                   }
                 />
@@ -194,7 +197,7 @@ export default function ImageCropEditor({
                   variant="bordered"
                   onSelectionChange={handleAspectChange}
                 >
-                  {aspectRatios.map(ratio => (
+                  {aspectRatios.map((ratio) => (
                     <SelectItem key={ratio.key} className="text-white">
                       {ratio.label}
                     </SelectItem>
@@ -222,7 +225,7 @@ export default function ImageCropEditor({
                   variant="bordered"
                   onSelectionChange={handleFormatChange}
                 >
-                  {supportedFormats.map(fmt => (
+                  {supportedFormats.map((fmt) => (
                     <SelectItem key={fmt.key} className="text-white">
                       {fmt.label}
                     </SelectItem>
@@ -270,9 +273,23 @@ export default function ImageCropEditor({
                 <div className="space-y-1 text-xs text-zinc-400">
                   <div>格式: {format.toUpperCase()}</div>
                   {(format === "jpeg" || format === "webp") && (
-                    <div>质量: {quality}%</div>
+                    <div className="flex items-center gap-1">
+                      质量:{" "}
+                      <NumberTicker
+                        className="text-violet-400 font-medium"
+                        value={quality}
+                      />
+                      %
+                    </div>
                   )}
-                  <div>缩放: {Math.round(zoom * 100)}%</div>
+                  <div className="flex items-center gap-1">
+                    缩放:{" "}
+                    <NumberTicker
+                      className="text-indigo-400 font-medium"
+                      value={Math.round(zoom * 100)}
+                    />
+                    %
+                  </div>
                 </div>
               </motion.div>
             </div>
@@ -288,16 +305,19 @@ export default function ImageCropEditor({
               >
                 取消
               </Button>
-              <Button
+              <ShimmerButton
+                background="linear-gradient(135deg, #7c3aed, #4f46e5)"
                 className="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-violet-500/25"
-                color="primary"
                 disabled={isProcessing}
-                isLoading={isProcessing}
-                startContent={<Download className="w-4 h-4" />}
-                onPress={onProcess}
+                shimmerColor="#ffffff"
+                shimmerDuration="2s"
+                onClick={onProcess}
               >
-                {isProcessing ? "处理中..." : "确认裁剪"}
-              </Button>
+                <div className="flex items-center gap-2">
+                  <Download className="w-4 h-4" />
+                  {isProcessing ? "处理中..." : "确认裁剪"}
+                </div>
+              </ShimmerButton>
             </div>
           </Card>
         </div>
