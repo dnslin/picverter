@@ -1,5 +1,6 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTheme } from "next-themes";
 
 import DefaultLayout from "@/layouts/default";
 import ImageDropZone from "@/components/ImageDropZone";
@@ -16,6 +17,7 @@ interface Area {
 }
 
 export default function IndexPage() {
+  const { theme } = useTheme();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [imageSrc, setImageSrc] = useState<string>("");
   const [showCropEditor, setShowCropEditor] = useState(false);
@@ -106,8 +108,8 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <div className="flex items-center justify-center min-h-full p-8">
-        <div className="w-full max-w-4xl">
+      <div className="flex flex-col justify-center min-h-full p-8">
+        <div className="w-full max-w-4xl mx-auto">
           {/* Header with creative animation */}
           <motion.div
             animate={{ y: 0, opacity: 1 }}
@@ -117,7 +119,11 @@ export default function IndexPage() {
           >
             <motion.h1
               animate={{ scale: 1 }}
-              className="text-4xl font-bold bg-gradient-to-r from-violet-400 via-purple-400 to-indigo-400 bg-clip-text text-transparent mb-4"
+              className={`text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent mb-4 transition-all duration-500 ${
+                theme === "light"
+                  ? "from-orange-600 via-amber-600 to-yellow-600"
+                  : "from-violet-400 via-purple-400 to-indigo-400"
+              }`}
               initial={{ scale: 0.9 }}
               transition={{
                 duration: 1,
@@ -130,7 +136,9 @@ export default function IndexPage() {
             </motion.h1>
             <motion.p
               animate={{ y: 0, opacity: 1 }}
-              className="text-zinc-400 text-lg max-w-2xl mx-auto"
+              className={`text-lg max-w-2xl mx-auto transition-colors duration-500 ${
+                theme === "light" ? "text-amber-700" : "text-zinc-400"
+              }`}
               initial={{ y: 20, opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
@@ -153,20 +161,34 @@ export default function IndexPage() {
           {/* Quick Info */}
           <motion.div
             animate={{ y: 0, opacity: 1 }}
-            className="mt-8 flex justify-center items-center gap-8 text-sm text-zinc-500"
+            className={`mt-8 flex justify-center items-center gap-8 text-sm transition-colors duration-500 ${
+              theme === "light" ? "text-amber-600" : "text-zinc-500"
+            }`}
             initial={{ y: 30, opacity: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
           >
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-violet-500 rounded-full" />
+              <div
+                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                  theme === "light" ? "bg-orange-500" : "bg-violet-500"
+                }`}
+              />
               <span>高质量处理</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-indigo-500 rounded-full" />
+              <div
+                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                  theme === "light" ? "bg-amber-500" : "bg-indigo-500"
+                }`}
+              />
               <span>多格式支持</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-purple-500 rounded-full" />
+              <div
+                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                  theme === "light" ? "bg-yellow-500" : "bg-purple-500"
+                }`}
+              />
               <span>桌面级体验</span>
             </div>
           </motion.div>

@@ -1,6 +1,7 @@
 import { useCallback, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card } from "@heroui/react";
+import { useTheme } from "next-themes";
 import { ImagePlus, Upload, Sparkles } from "lucide-react";
 
 interface ImageDropZoneProps {
@@ -12,6 +13,7 @@ export default function ImageDropZone({
   onImageSelect,
   className = "",
 }: ImageDropZoneProps) {
+  const { theme } = useTheme();
   const [isDragOver, setIsDragOver] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
 
@@ -61,8 +63,12 @@ export default function ImageDropZone({
       <Card
         className={`relative min-h-[420px] cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
           isDragOver
-            ? "border-violet-400 bg-violet-500/10 shadow-2xl shadow-violet-500/20"
-            : "border-zinc-700 bg-zinc-900/40 hover:border-zinc-600 hover:bg-zinc-900/60"
+            ? theme === "light"
+              ? "border-orange-400 bg-orange-500/10 shadow-2xl shadow-orange-500/20"
+              : "border-violet-400 bg-violet-500/10 shadow-2xl shadow-violet-500/20"
+            : theme === "light"
+              ? "border-orange-300/60 bg-white/40 hover:border-orange-400 hover:bg-orange-50/60"
+              : "border-zinc-700 bg-zinc-900/40 hover:border-zinc-600 hover:bg-zinc-900/60"
         }`}
         onDragLeave={handleDragLeave}
         onDragOver={handleDragOver}
@@ -90,15 +96,23 @@ export default function ImageDropZone({
               >
                 <motion.div
                   animate={{ rotate: 360, scale: [1, 1.1, 1] }}
-                  className="w-20 h-20 bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 shadow-2xl shadow-violet-500/30"
+                  className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 shadow-2xl transition-colors duration-500 ${
+                    theme === "light"
+                      ? "bg-gradient-to-br from-orange-400 via-amber-500 to-yellow-500 shadow-orange-500/30"
+                      : "bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 shadow-violet-500/30"
+                  }`}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                 >
                   <Upload className="w-8 h-8 text-white" />
                 </motion.div>
-                <h3 className="text-xl font-semibold text-violet-400 mb-3">
+                <h3 className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
+                  theme === "light" ? "text-orange-600" : "text-violet-400"
+                }`}>
                   释放以上传图片
                 </h3>
-                <p className="text-zinc-300 text-sm">
+                <p className={`text-sm transition-colors duration-500 ${
+                  theme === "light" ? "text-amber-700" : "text-zinc-300"
+                }`}>
                   支持 JPEG, PNG, GIF, BMP 格式
                 </p>
               </motion.div>
@@ -127,7 +141,11 @@ export default function ImageDropZone({
                           rotateX: 0,
                         }
                   }
-                  className="w-20 h-20 bg-gradient-to-br from-zinc-800 to-zinc-900 rounded-2xl flex items-center justify-center mb-6 border border-zinc-700 shadow-xl relative"
+                  className={`w-20 h-20 rounded-2xl flex items-center justify-center mb-6 border shadow-xl relative transition-colors duration-500 ${
+                    theme === "light"
+                      ? "bg-gradient-to-br from-orange-100 to-amber-100 border-orange-200"
+                      : "bg-gradient-to-br from-zinc-800 to-zinc-900 border-zinc-700"
+                  }`}
                   style={{ perspective: 1000 }}
                   transition={{
                     duration: 0.5,
@@ -140,7 +158,9 @@ export default function ImageDropZone({
                     animate={isHovered ? { rotate: 360 } : { rotate: 0 }}
                     transition={{ duration: 0.8, ease: "easeInOut" }}
                   >
-                    <ImagePlus className="w-8 h-8 text-zinc-400" />
+                    <ImagePlus className={`w-8 h-8 transition-colors duration-500 ${
+                      theme === "light" ? "text-orange-600" : "text-zinc-400"
+                    }`} />
                   </motion.div>
 
                   {/* Floating dots when hovered */}
@@ -164,29 +184,51 @@ export default function ImageDropZone({
                       />
                     ))}
                 </motion.div>
-                <h3 className="text-xl font-semibold text-white mb-3">
+                <h3 className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
+                  theme === "light" ? "text-amber-900" : "text-white"
+                }`}>
                   拖拽图片到这里
                 </h3>
-                <p className="text-zinc-400 text-sm mb-6">
+                <p className={`text-sm mb-6 transition-colors duration-500 ${
+                  theme === "light" ? "text-amber-700" : "text-zinc-400"
+                }`}>
                   或点击选择要处理的图片文件
                 </p>
 
-                <div className="flex items-center gap-4 text-xs text-zinc-500">
+                <div className={`flex items-center gap-4 text-xs transition-colors duration-500 ${
+                  theme === "light" ? "text-amber-600" : "text-zinc-500"
+                }`}>
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-3 h-3" />
                     <span>支持格式</span>
                   </div>
                   <div className="flex gap-2">
-                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                    <span className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
+                      theme === "light" 
+                        ? "bg-orange-100/80 border-orange-200 text-orange-700"
+                        : "bg-zinc-800/50 border-zinc-700 text-zinc-300"
+                    }`}>
                       JPEG
                     </span>
-                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                    <span className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
+                      theme === "light" 
+                        ? "bg-orange-100/80 border-orange-200 text-orange-700"
+                        : "bg-zinc-800/50 border-zinc-700 text-zinc-300"
+                    }`}>
                       PNG
                     </span>
-                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                    <span className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
+                      theme === "light" 
+                        ? "bg-orange-100/80 border-orange-200 text-orange-700"
+                        : "bg-zinc-800/50 border-zinc-700 text-zinc-300"
+                    }`}>
                       GIF
                     </span>
-                    <span className="px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700">
+                    <span className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
+                      theme === "light" 
+                        ? "bg-orange-100/80 border-orange-200 text-orange-700"
+                        : "bg-zinc-800/50 border-zinc-700 text-zinc-300"
+                    }`}>
                       BMP
                     </span>
                   </div>
