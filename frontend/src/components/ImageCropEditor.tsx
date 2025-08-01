@@ -1,8 +1,9 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Card, Button, Slider, Select, SelectItem } from "@heroui/react";
 import Cropper from "react-easy-crop";
-import { ZoomIn, Crop, Download, X } from "lucide-react";
+import { ZoomIn, Crop, Download, X, Grid3X3, Move } from "lucide-react";
+import { useTheme } from "next-themes";
 
 import MagicProcessing from "./MagicProcessing";
 
@@ -47,6 +48,46 @@ const aspectRatios = [
   { key: "3:2", label: "3:2 经典", value: 3 / 2 },
 ];
 
+// 主题样式配置
+const getThemeStyles = (theme: string | undefined) => {
+  const isDark = theme === "dark";
+
+  return {
+    overlay: isDark
+      ? "bg-black/90 backdrop-blur-xl"
+      : "bg-white/95 backdrop-blur-xl",
+    cropArea: isDark
+      ? "bg-zinc-950/90 border-zinc-800/50"
+      : "bg-white/95 border-gray-200/50",
+    controlPanel: isDark
+      ? "bg-zinc-950/90 border-zinc-800/50"
+      : "bg-white/95 border-gray-200/50",
+    text: {
+      primary: isDark ? "text-white" : "text-gray-900",
+      secondary: isDark ? "text-zinc-300" : "text-gray-600",
+      muted: isDark ? "text-zinc-400" : "text-gray-500",
+    },
+    gradients: {
+      primary: isDark
+        ? "from-violet-500 via-purple-500 to-indigo-500"
+        : "from-amber-500 via-orange-500 to-red-500",
+      accent: isDark
+        ? "from-violet-500 to-indigo-500"
+        : "from-blue-500 to-indigo-500",
+    },
+    cropperStyle: {
+      containerStyle: {
+        borderRadius: "12px",
+        backgroundColor: isDark ? "#0a0a0a" : "#f8fafc",
+      },
+      cropAreaStyle: {
+        border: isDark ? "2px solid #8b5cf6" : "2px solid #3b82f6",
+        borderRadius: "8px",
+      },
+    },
+  };
+};
+
 export default function ImageCropEditor({
   imageSrc,
   onCropComplete,
@@ -56,11 +97,54 @@ export default function ImageCropEditor({
   onCancel,
   isProcessing = false,
 }: ImageCropEditorProps) {
+  const { theme } = useTheme();
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [aspect, setAspect] = useState<number | null>(null);
   const [format, setFormat] = useState("jpeg");
   const [quality, setQuality] = useState(90);
+  const [isInitialized, setIsInitialized] = useState(false);
+
+  const styles = getThemeStyles(theme);
+
+  // 初始化裁剪框位置和大小
+  useEffect(() => {
+    if (!isInitialized && imageSrc) {
+      // 重置所有状态到初始值，确保裁剪框正确显示
+      setCrop({ x: 0, y: 0 });
+      setZoom(1);
+      setAspect(null);
+      setFormat("jpeg");
+      setQuality(90);
+      setIsInitialized(true);
+    }
+  }, [imageSrc, isInitialized]);
+
+  // 组件卸载时重置初始化状态
+  useEffect(() => {
+    return () => {
+      setIsInitialized(false);
+    };
+  }, []);
+
+  // 键盘快捷键支持
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onCancel();
+      } else if (event.key === "Enter" && !isProcessing) {
+        onProcess();
+      } else if (event.key === "+" || event.key === "=") {
+        setZoom((prev) => Math.min(3, prev + 0.1));
+      } else if (event.key === "-") {
+        setZoom((prev) => Math.max(1, prev - 0.1));
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onCancel, onProcess, isProcessing]);
 
   const handleCropComplete = useCallback(
     (croppedArea: Area, croppedAreaPixels: Area) => {
@@ -100,25 +184,24 @@ export default function ImageCropEditor({
     <>
       <motion.div
         animate={{ opacity: 1, scale: 1 }}
-        className="fixed inset-0 bg-black/90 backdrop-blur-xl z-50 flex items-center justify-center p-6"
+        className={`fixed inset-0 ${styles.overlay} z-50 flex items-center justify-center p-4`}
         exit={{ opacity: 0, scale: 0.95 }}
         initial={{ opacity: 0, scale: 0.95 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
       >
-        <div className="w-full max-w-7xl h-full max-h-[90vh] flex gap-6">
+        <div className="w-full h-full flex gap-4 max-w-none">
           {/* Main crop area */}
-          <Card className="flex-1 bg-zinc-950/90 border border-zinc-800/50 backdrop-blur-xl shadow-2xl">
+          <Card
+            className={`flex-1 ${styles.cropArea} backdrop-blur-xl shadow-2xl min-w-0`}
+          >
             <div className="h-full relative rounded-xl overflow-hidden">
               <Cropper
                 aspect={aspect || undefined}
                 crop={crop}
                 image={imageSrc}
-                style={{
-                  containerStyle: {
-                    borderRadius: "12px",
-                    backgroundColor: "#0a0a0a",
-                  },
-                }}
+                restrictPosition={false}
+                showGrid={true}
+                style={styles.cropperStyle}
                 zoom={zoom}
                 onCropChange={setCrop}
                 onCropComplete={handleCropComplete}
@@ -128,22 +211,30 @@ export default function ImageCropEditor({
           </Card>
 
           {/* Control Panel */}
-          <Card className="w-96 bg-zinc-950/90 border border-zinc-800/50 backdrop-blur-xl flex flex-col shadow-2xl">
-            <div className="p-6 border-b border-zinc-800/50">
+          <Card
+            className={`w-80 xl:w-96 ${styles.controlPanel} backdrop-blur-xl flex flex-col shadow-2xl`}
+          >
+            <div
+              className={`p-4 xl:p-6 border-b ${theme === "dark" ? "border-zinc-800/50" : "border-gray-200/50"}`}
+            >
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 bg-gradient-to-br from-violet-500 via-purple-500 to-indigo-500 rounded-xl flex items-center justify-center">
+                <div
+                  className={`w-10 h-10 bg-gradient-to-br ${styles.gradients.primary} rounded-xl flex items-center justify-center`}
+                >
                   <Crop className="w-5 h-5 text-white" />
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-white">图片裁剪</h2>
-                  <p className="text-zinc-400 text-sm">
+                  <h2 className={`text-xl font-bold ${styles.text.primary}`}>
+                    图片裁剪
+                  </h2>
+                  <p className={`${styles.text.muted} text-sm`}>
                     调整裁剪区域和输出设置
                   </p>
                 </div>
               </div>
             </div>
 
-            <div className="flex-1 p-6 space-y-6 overflow-auto">
+            <div className="flex-1 p-4 xl:p-6 space-y-4 xl:space-y-6 overflow-auto">
               {/* Zoom Control */}
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
@@ -151,8 +242,12 @@ export default function ImageCropEditor({
                 transition={{ delay: 0.1 }}
               >
                 <div className="flex items-center gap-2 mb-3">
-                  <ZoomIn className="w-4 h-4 text-violet-400" />
-                  <span className="text-sm font-medium text-zinc-300">
+                  <ZoomIn
+                    className={`w-4 h-4 ${theme === "dark" ? "text-violet-400" : "text-blue-500"}`}
+                  />
+                  <span
+                    className={`text-sm font-medium ${styles.text.secondary}`}
+                  >
                     缩放: {Math.round(zoom * 100)}%
                   </span>
                 </div>
@@ -161,8 +256,8 @@ export default function ImageCropEditor({
                   className="w-full"
                   classNames={{
                     base: "max-w-md",
-                    track: "bg-zinc-800",
-                    filler: "bg-gradient-to-r from-violet-500 to-indigo-500",
+                    track: theme === "dark" ? "bg-zinc-800" : "bg-gray-200",
+                    filler: `bg-gradient-to-r ${styles.gradients.accent}`,
                     thumb: "bg-white shadow-lg",
                   }}
                   color="secondary"
@@ -183,13 +278,27 @@ export default function ImageCropEditor({
                 initial={{ y: 20, opacity: 0 }}
                 transition={{ delay: 0.2 }}
               >
-                <span className="block text-sm font-medium text-zinc-300 mb-3">
-                  长宽比
-                </span>
+                <div className="flex items-center gap-2 mb-3">
+                  <Grid3X3
+                    className={`w-4 h-4 ${theme === "dark" ? "text-violet-400" : "text-blue-500"}`}
+                  />
+                  <span
+                    className={`text-sm font-medium ${styles.text.secondary}`}
+                  >
+                    长宽比
+                  </span>
+                </div>
                 <Select
+                  aria-label="选择长宽比"
                   classNames={{
-                    trigger: "bg-zinc-800 border-zinc-600 text-white",
-                    popoverContent: "bg-zinc-800 border-zinc-600",
+                    trigger:
+                      theme === "dark"
+                        ? "bg-zinc-800 border-zinc-600 text-white"
+                        : "bg-white border-gray-300 text-gray-900",
+                    popoverContent:
+                      theme === "dark"
+                        ? "bg-zinc-800 border-zinc-600"
+                        : "bg-white border-gray-300",
                   }}
                   defaultSelectedKeys={["free"]}
                   placeholder="选择长宽比"
@@ -198,7 +307,12 @@ export default function ImageCropEditor({
                   onSelectionChange={handleAspectChange}
                 >
                   {aspectRatios.map((ratio) => (
-                    <SelectItem key={ratio.key} className="text-white">
+                    <SelectItem
+                      key={ratio.key}
+                      className={
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }
+                    >
                       {ratio.label}
                     </SelectItem>
                   ))}
@@ -211,13 +325,27 @@ export default function ImageCropEditor({
                 initial={{ y: 20, opacity: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <span className="block text-sm font-medium text-zinc-300 mb-3">
-                  输出格式
-                </span>
+                <div className="flex items-center gap-2 mb-3">
+                  <Download
+                    className={`w-4 h-4 ${theme === "dark" ? "text-violet-400" : "text-blue-500"}`}
+                  />
+                  <span
+                    className={`text-sm font-medium ${styles.text.secondary}`}
+                  >
+                    输出格式
+                  </span>
+                </div>
                 <Select
+                  aria-label="选择输出格式"
                   classNames={{
-                    trigger: "bg-zinc-800 border-zinc-600 text-white",
-                    popoverContent: "bg-zinc-800 border-zinc-600",
+                    trigger:
+                      theme === "dark"
+                        ? "bg-zinc-800 border-zinc-600 text-white"
+                        : "bg-white border-gray-300 text-gray-900",
+                    popoverContent:
+                      theme === "dark"
+                        ? "bg-zinc-800 border-zinc-600"
+                        : "bg-white border-gray-300",
                   }}
                   defaultSelectedKeys={["jpeg"]}
                   placeholder="选择格式"
@@ -226,7 +354,12 @@ export default function ImageCropEditor({
                   onSelectionChange={handleFormatChange}
                 >
                   {supportedFormats.map((fmt) => (
-                    <SelectItem key={fmt.key} className="text-white">
+                    <SelectItem
+                      key={fmt.key}
+                      className={
+                        theme === "dark" ? "text-white" : "text-gray-900"
+                      }
+                    >
                       {fmt.label}
                     </SelectItem>
                   ))}
@@ -242,12 +375,22 @@ export default function ImageCropEditor({
                     initial={{ y: 20, opacity: 0, height: 0 }}
                     transition={{ delay: 0.4 }}
                   >
-                    <label className="block text-sm font-medium text-zinc-300 mb-3">
+                    <label
+                      className={`block text-sm font-medium ${styles.text.secondary} mb-3`}
+                    >
                       图片质量: {quality}%
                     </label>
                     <Slider
                       aria-label="Quality"
                       className="w-full"
+                      classNames={{
+                        track: theme === "dark" ? "bg-zinc-800" : "bg-gray-200",
+                        filler:
+                          theme === "dark"
+                            ? "bg-gradient-to-r from-green-500 to-emerald-500"
+                            : "bg-gradient-to-r from-green-600 to-emerald-600",
+                        thumb: "bg-white shadow-lg",
+                      }}
                       color="success"
                       maxValue={100}
                       minValue={1}
@@ -263,20 +406,26 @@ export default function ImageCropEditor({
               {/* Preview Info */}
               <motion.div
                 animate={{ y: 0, opacity: 1 }}
-                className="p-4 bg-zinc-800/50 rounded-lg border border-zinc-700"
+                className={`p-4 rounded-lg border ${
+                  theme === "dark"
+                    ? "bg-zinc-800/50 border-zinc-700"
+                    : "bg-gray-50/50 border-gray-200"
+                }`}
                 initial={{ y: 20, opacity: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <h4 className="text-sm font-medium text-zinc-300 mb-2">
+                <h4
+                  className={`text-sm font-medium ${styles.text.secondary} mb-2`}
+                >
                   输出预览
                 </h4>
-                <div className="space-y-1 text-xs text-zinc-400">
+                <div className={`space-y-1 text-xs ${styles.text.muted}`}>
                   <div>格式: {format.toUpperCase()}</div>
                   {(format === "jpeg" || format === "webp") && (
                     <div className="flex items-center gap-1">
                       质量:{" "}
                       <NumberTicker
-                        className="text-violet-400 font-medium"
+                        className={`${theme === "dark" ? "text-violet-400" : "text-blue-500"} font-medium`}
                         value={quality}
                       />
                       %
@@ -285,19 +434,50 @@ export default function ImageCropEditor({
                   <div className="flex items-center gap-1">
                     缩放:{" "}
                     <NumberTicker
-                      className="text-indigo-400 font-medium"
+                      className={`${theme === "dark" ? "text-indigo-400" : "text-indigo-600"} font-medium`}
                       value={Math.round(zoom * 100)}
                     />
                     %
                   </div>
                 </div>
               </motion.div>
+
+              {/* 快捷键提示 */}
+              <motion.div
+                animate={{ y: 0, opacity: 1 }}
+                className={`p-3 rounded-lg border ${
+                  theme === "dark"
+                    ? "bg-zinc-800/30 border-zinc-700/50"
+                    : "bg-blue-50/50 border-blue-200/50"
+                }`}
+                initial={{ y: 20, opacity: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <Move
+                    className={`w-3 h-3 ${theme === "dark" ? "text-zinc-400" : "text-gray-500"}`}
+                  />
+                  <span className={`text-xs font-medium ${styles.text.muted}`}>
+                    快捷键
+                  </span>
+                </div>
+                <div className={`space-y-1 text-xs ${styles.text.muted}`}>
+                  <div>ESC: 取消 | Enter: 确认</div>
+                  <div>+/-: 缩放调整</div>
+                </div>
+              </motion.div>
             </div>
 
             {/* Actions */}
-            <div className="p-6 border-t border-zinc-800/50 flex gap-3">
+            <div
+              className={`p-4 xl:p-6 border-t ${theme === "dark" ? "border-zinc-800/50" : "border-gray-200/50"} flex gap-3`}
+            >
               <Button
-                className="flex-1 text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                className={`flex-1 ${
+                  theme === "dark"
+                    ? "text-zinc-400 hover:text-white hover:bg-zinc-800/50"
+                    : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/50"
+                }`}
                 disabled={isProcessing}
                 startContent={<X className="w-4 h-4" />}
                 variant="light"
@@ -306,8 +486,20 @@ export default function ImageCropEditor({
                 取消
               </Button>
               <ShimmerButton
-                background="linear-gradient(135deg, #7c3aed, #4f46e5)"
-                className="flex-1 bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-medium shadow-lg shadow-violet-500/25"
+                background={
+                  theme === "dark"
+                    ? "linear-gradient(135deg, #7c3aed, #4f46e5)"
+                    : "linear-gradient(135deg, #3b82f6, #1d4ed8)"
+                }
+                className={`flex-1 ${
+                  theme === "dark"
+                    ? "bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700"
+                    : "bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700"
+                } text-white font-medium shadow-lg ${
+                  theme === "dark"
+                    ? "shadow-violet-500/25"
+                    : "shadow-blue-500/25"
+                }`}
                 disabled={isProcessing}
                 shimmerColor="#ffffff"
                 shimmerDuration="2s"
