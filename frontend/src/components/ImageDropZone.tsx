@@ -6,39 +6,48 @@ import { ImagePlus, Upload, Sparkles } from "lucide-react";
 
 interface ImageDropZoneProps {
   onImageSelect: (file: File) => void;
+
   className?: string;
 }
 
 export default function ImageDropZone({
   onImageSelect,
+
   className = "",
 }: ImageDropZoneProps) {
   const { theme } = useTheme();
+
   const [isDragOver, setIsDragOver] = useState(false);
+
   const [isHovered, setIsHovered] = useState(false);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+
     setIsDragOver(true);
   }, []);
 
   const handleDragLeave = useCallback((e: React.DragEvent) => {
     e.preventDefault();
+
     setIsDragOver(false);
   }, []);
 
   const handleDrop = useCallback(
     (e: React.DragEvent) => {
       e.preventDefault();
+
       setIsDragOver(false);
 
       const files = Array.from(e.dataTransfer.files);
+
       const imageFile = files.find((file) => file.type.startsWith("image/"));
 
       if (imageFile) {
         onImageSelect(imageFile);
       }
     },
+
     [onImageSelect],
   );
 
@@ -50,6 +59,7 @@ export default function ImageDropZone({
         onImageSelect(file);
       }
     },
+
     [onImageSelect],
   );
 
@@ -61,7 +71,7 @@ export default function ImageDropZone({
       transition={{ duration: 0.5 }}
     >
       <Card
-        className={`relative min-h-[360px] flex-1 cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
+        className={`relative min-h-[320px] flex-1 cursor-pointer transition-all duration-500 border-2 border-dashed overflow-hidden backdrop-blur-xl ${
           isDragOver
             ? theme === "light"
               ? "border-orange-400 bg-orange-500/10 shadow-2xl shadow-orange-500/20"
@@ -105,6 +115,7 @@ export default function ImageDropZone({
                 >
                   <Upload className="w-8 h-8 text-white" />
                 </motion.div>
+
                 <h3
                   className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
                     theme === "light" ? "text-orange-600" : "text-violet-400"
@@ -112,6 +123,7 @@ export default function ImageDropZone({
                 >
                   释放以上传图片
                 </h3>
+
                 <p
                   className={`text-sm transition-colors duration-500 ${
                     theme === "light" ? "text-amber-700" : "text-zinc-300"
@@ -134,14 +146,20 @@ export default function ImageDropZone({
                     isHovered
                       ? {
                           scale: 1.1,
+
                           y: -10,
+
                           rotateY: 15,
+
                           rotateX: 5,
                         }
                       : {
                           scale: 1,
+
                           y: 0,
+
                           rotateY: 0,
+
                           rotateX: 0,
                         }
                   }
@@ -153,8 +171,11 @@ export default function ImageDropZone({
                   style={{ perspective: 1000 }}
                   transition={{
                     duration: 0.5,
+
                     ease: "easeOut",
+
                     type: "spring",
+
                     stiffness: 100,
                   }}
                 >
@@ -170,26 +191,33 @@ export default function ImageDropZone({
                   </motion.div>
 
                   {/* Floating dots when hovered */}
+
                   {isHovered &&
                     [...Array(4)].map((_, i) => (
                       <motion.div
                         key={i}
                         animate={{
                           opacity: [0, 1, 0],
+
                           scale: [0, 1, 0],
+
                           x: Math.cos((i * 90 * Math.PI) / 180) * 30,
+
                           y: Math.sin((i * 90 * Math.PI) / 180) * 30,
                         }}
                         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-2 h-2 bg-violet-400 rounded-full"
                         initial={{ opacity: 0, scale: 0 }}
                         transition={{
                           duration: 1.5,
+
                           repeat: Infinity,
+
                           delay: i * 0.1,
                         }}
                       />
                     ))}
                 </motion.div>
+
                 <h3
                   className={`text-xl font-semibold mb-3 transition-colors duration-500 ${
                     theme === "light" ? "text-amber-900" : "text-white"
@@ -197,6 +225,7 @@ export default function ImageDropZone({
                 >
                   拖拽图片到这里
                 </h3>
+
                 <p
                   className={`text-sm mb-6 transition-colors duration-500 ${
                     theme === "light" ? "text-amber-700" : "text-zinc-400"
@@ -212,8 +241,10 @@ export default function ImageDropZone({
                 >
                   <div className="flex items-center gap-2">
                     <Sparkles className="w-3 h-3" />
+
                     <span>支持格式</span>
                   </div>
+
                   <div className="flex gap-2">
                     <span
                       className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
@@ -224,6 +255,7 @@ export default function ImageDropZone({
                     >
                       JPEG
                     </span>
+
                     <span
                       className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
                         theme === "light"
@@ -233,6 +265,7 @@ export default function ImageDropZone({
                     >
                       PNG
                     </span>
+
                     <span
                       className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
                         theme === "light"
@@ -242,6 +275,7 @@ export default function ImageDropZone({
                     >
                       GIF
                     </span>
+
                     <span
                       className={`px-3 py-1 rounded-full border transition-colors duration-500 ${
                         theme === "light"
@@ -258,26 +292,35 @@ export default function ImageDropZone({
           </AnimatePresence>
 
           {/* Animated background particles */}
+
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {[...Array(8)].map((_, i) => (
               <motion.div
                 key={i}
                 animate={{
                   x: Math.random() * 500,
+
                   y: Math.random() * 400,
+
                   opacity: [0, 0.7, 0],
+
                   scale: [0.5, 1.5, 0.5],
                 }}
                 className="absolute w-1 h-1 bg-violet-400/20 rounded-full"
                 initial={{
                   x: Math.random() * 500,
+
                   y: Math.random() * 400,
+
                   opacity: 0,
                 }}
                 transition={{
                   duration: 4 + Math.random() * 3,
+
                   repeat: Infinity,
+
                   ease: "easeInOut",
+
                   delay: Math.random() * 3,
                 }}
               />
