@@ -20,11 +20,10 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
 
   const { theme, setTheme } = useTheme();
 
-  const { Component, slots, isSelected, getBaseProps, getInputProps } =
-    useSwitch({
-      isSelected: theme === "light",
-      onChange: () => setTheme(theme === "light" ? "dark" : "light"),
-    });
+  const { Component, isSelected, getBaseProps, getInputProps } = useSwitch({
+    isSelected: theme === "light",
+    onChange: () => setTheme(theme === "light" ? "dark" : "light"),
+  });
 
   useEffect(() => {
     setIsMounted(true);
@@ -48,47 +47,31 @@ export const ThemeSwitch: FC<ThemeSwitchProps> = ({
         <input {...getInputProps()} />
       </VisuallyHidden>
       <motion.div
-        className={slots.wrapper({
-          class: clsx(
-            [
-              "w-8 h-8",
-              "bg-gradient-to-br",
-              isSelected
-                ? "from-warm-400 to-warm-600 text-warm-50"
-                : "from-emerald-400 to-cyan-400 text-zinc-900",
-              "rounded-xl",
-              "flex items-center justify-center",
-              "shadow-lg shadow-black/20 dark:shadow-black/40",
-              "border border-white/20",
-              "group-hover:shadow-xl group-hover:shadow-black/30",
-              "transition-all duration-300",
-              "group-data-[selected=true]:bg-transparent",
-              "backdrop-blur-sm",
-            ],
-            classNames?.wrapper
-          ),
-        })}
-        whileHover={{ scale: 1.1, rotate: 10 }}
-        whileTap={{ scale: 0.95 }}
+        className={clsx(
+          "w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-300 border",
+          theme === "light"
+            ? "bg-gray-200 border-gray-300 hover:bg-gray-300"
+            : "bg-gray-700 border-gray-600 hover:bg-gray-600"
+        )}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.98 }}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={isSelected ? "sun" : "moon"}
             animate={{ opacity: 1, rotate: 0, scale: 1 }}
-            exit={{ opacity: 0, rotate: 180, scale: 0.5 }}
-            initial={{ opacity: 0, rotate: -180, scale: 0.5 }}
+            className={isSelected ? "text-amber-500" : "text-blue-400"} // 简单的颜色区分
+            exit={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.8 }}
             transition={{
-              duration: 0.4,
+              duration: 0.2,
               ease: "easeInOut",
-              type: "spring",
-              stiffness: 200,
-              damping: 20,
             }}
           >
             {isSelected ? (
-              <SunFilledIcon size={18} />
+              <SunFilledIcon size={16} />
             ) : (
-              <MoonFilledIcon size={18} />
+              <MoonFilledIcon size={16} />
             )}
           </motion.div>
         </AnimatePresence>

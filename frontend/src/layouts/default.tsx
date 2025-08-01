@@ -2,7 +2,6 @@ import { motion } from "framer-motion";
 import { Button } from "@heroui/react";
 import { useTheme } from "next-themes";
 import {
-  Camera,
   Image as ImageIcon,
   FolderOpen,
   Ruler,
@@ -12,6 +11,7 @@ import {
 } from "lucide-react";
 
 import { ThemeSwitch } from "@/components/theme-switch";
+import Logo from "@/components/Logo";
 
 export default function DefaultLayout({
   children,
@@ -24,8 +24,8 @@ export default function DefaultLayout({
     <div
       className={`relative flex h-screen overflow-hidden transition-colors duration-500 ${
         theme === "light"
-          ? "bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 text-amber-900"
-          : "bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 text-white"
+          ? "bg-gradient-to-br from-gray-50 via-white to-gray-100 text-gray-800"
+          : "bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-gray-100"
       }`}
     >
       {/* Sidebar */}
@@ -33,8 +33,8 @@ export default function DefaultLayout({
         animate={{ x: 0, opacity: 1 }}
         className={`w-64 backdrop-blur-sm border-r flex flex-col transition-colors duration-500 ${
           theme === "light"
-            ? "bg-white/90 border-orange-200/60"
-            : "bg-zinc-800/50 border-zinc-700/50"
+            ? "bg-white/95 border-gray-200/60"
+            : "bg-gray-800/50 border-gray-700/50"
         }`}
         initial={{ x: -200, opacity: 0 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
@@ -43,55 +43,18 @@ export default function DefaultLayout({
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           className={`p-6 border-b transition-colors duration-500 ${
-            theme === "light" ? "border-orange-200/60" : "border-zinc-700/50"
+            theme === "light" ? "border-gray-200/60" : "border-gray-700/50"
           }`}
           initial={{ y: -20, opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
         >
           <div className="flex items-center gap-3">
-            <motion.div
-              className={`w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-500 ${
-                theme === "light"
-                  ? "bg-gradient-to-br from-warm-400 to-warm-600"
-                  : "bg-gradient-to-br from-emerald-400 to-cyan-400"
-              }`}
-              transition={{
-                type: "spring",
-                stiffness: 400,
-                damping: 17,
-              }}
-              whileHover={{
-                scale: 1.1,
-                rotate: [0, -10, 10, 0],
-                boxShadow:
-                  theme === "light"
-                    ? "0 8px 25px rgba(251, 146, 60, 0.4)"
-                    : "0 8px 25px rgba(52, 211, 153, 0.4)",
-              }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <motion.div
-                animate={{
-                  rotate: [0, 5, -5, 0],
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              >
-                <Camera
-                  className={`w-4 h-4 transition-colors duration-500 ${
-                    theme === "light" ? "text-warm-50" : "text-zinc-900"
-                  }`}
-                />
-              </motion.div>
-            </motion.div>
+            <Logo animated={true} size="md" />
             <h1
               className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-500 ${
                 theme === "light"
-                  ? "from-warm-600 to-warm-800"
-                  : "from-emerald-400 to-cyan-400"
+                  ? "from-amber-600 to-orange-600"
+                  : "from-blue-400 to-cyan-400"
               }`}
             >
               PicVerter
@@ -118,14 +81,14 @@ export default function DefaultLayout({
         <motion.div
           animate={{ y: 0, opacity: 1 }}
           className={`p-4 border-t transition-colors duration-500 ${
-            theme === "light" ? "border-orange-200/60" : "border-zinc-700/50"
+            theme === "light" ? "border-gray-200/60" : "border-gray-700/50"
           }`}
           initial={{ y: 20, opacity: 0 }}
           transition={{ duration: 0.6, delay: 0.4 }}
         >
           <div
             className={`text-xs mb-3 font-medium tracking-wide transition-colors duration-500 ${
-              theme === "light" ? "text-warm-gray-600" : "text-zinc-400"
+              theme === "light" ? "text-gray-600" : "text-gray-400"
             }`}
           >
             常用功能
@@ -146,8 +109,8 @@ export default function DefaultLayout({
           animate={{ y: 0, opacity: 1 }}
           className={`h-14 backdrop-blur-sm border-b flex items-center justify-between px-6 transition-colors duration-500 ${
             theme === "light"
-              ? "bg-white/70 border-orange-200/60"
-              : "bg-zinc-800/30 border-zinc-700/50"
+              ? "bg-white/70 border-gray-200/60"
+              : "bg-gray-800/30 border-gray-700/50"
           }`}
           initial={{ y: -50, opacity: 0 }}
           transition={{ duration: 0.5, delay: 0.1 }}
@@ -155,7 +118,7 @@ export default function DefaultLayout({
           <div className="flex items-center gap-4">
             <div
               className={`text-sm transition-colors duration-500 ${
-                theme === "light" ? "text-warm-gray-600" : "text-zinc-400"
+                theme === "light" ? "text-gray-600" : "text-gray-400"
               }`}
             >
               快速开始
@@ -167,8 +130,8 @@ export default function DefaultLayout({
               isIconOnly
               className={`transition-colors duration-500 ${
                 theme === "light"
-                  ? "text-warm-gray-600 hover:text-warm-600"
-                  : "text-zinc-400 hover:text-emerald-400"
+                  ? "text-gray-600 hover:text-amber-600"
+                  : "text-gray-400 hover:text-blue-400"
               }`}
               variant="ghost"
             >
@@ -200,11 +163,11 @@ function NavItem({
       className={`flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer transition-all duration-300 ${
         active
           ? theme === "light"
-            ? "bg-gradient-to-r from-warm-400/20 to-warm-600/20 text-warm-700 border border-warm-400/40"
-            : "bg-gradient-to-r from-emerald-500/20 to-cyan-500/20 text-emerald-400 border border-emerald-500/30"
+            ? "bg-gradient-to-r from-amber-400/20 to-orange-400/20 text-amber-700 border border-amber-400/40"
+            : "bg-gradient-to-r from-blue-500/20 to-cyan-500/20 text-blue-400 border border-blue-500/30"
           : theme === "light"
-            ? "text-warm-gray-600 hover:text-warm-gray-900 hover:bg-caramel-100/60"
-            : "text-zinc-400 hover:text-white hover:bg-zinc-700/50"
+            ? "text-gray-600 hover:text-gray-900 hover:bg-gray-100/60"
+            : "text-gray-400 hover:text-white hover:bg-gray-700/50"
       }`}
       whileHover={{ x: 4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
@@ -222,8 +185,8 @@ function ToolButton({ icon, label }: { icon: React.ReactNode; label: string }) {
     <motion.div
       className={`flex flex-col items-center gap-1 p-3 rounded-lg cursor-pointer transition-all duration-300 border ${
         theme === "light"
-          ? "bg-caramel-50/60 hover:bg-caramel-100/80 border-caramel-200/40 hover:border-warm-400/50"
-          : "bg-zinc-700/30 hover:bg-zinc-700/50 border-zinc-600/30 hover:border-emerald-500/30"
+          ? "bg-gray-50/60 hover:bg-gray-100/80 border-gray-200/40 hover:border-amber-400/50"
+          : "bg-gray-700/30 hover:bg-gray-700/50 border-gray-600/30 hover:border-blue-500/30"
       }`}
       whileHover={{ scale: 1.05, y: -2 }}
       whileTap={{ scale: 0.95 }}
@@ -231,7 +194,7 @@ function ToolButton({ icon, label }: { icon: React.ReactNode; label: string }) {
       <span className="flex items-center justify-center">{icon}</span>
       <span
         className={`text-xs transition-colors duration-300 ${
-          theme === "light" ? "text-warm-gray-600" : "text-zinc-400"
+          theme === "light" ? "text-gray-600" : "text-gray-400"
         }`}
       >
         {label}

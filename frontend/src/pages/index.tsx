@@ -374,8 +374,8 @@ export default function IndexPage() {
               animate={{ y: 0, opacity: 1 }}
               className={`w-full flex justify-between items-center p-3 rounded-xl mb-4 border transition-all duration-500 h-14 flex-shrink-0 ${
                 theme === "light"
-                  ? "bg-white/60 border-orange-200/50 backdrop-blur-sm"
-                  : "bg-zinc-900/60 border-zinc-700/50 backdrop-blur-sm"
+                  ? "bg-white/60 border-gray-200/50 backdrop-blur-sm"
+                  : "bg-gray-900/60 border-gray-700/50 backdrop-blur-sm"
               }`}
               initial={{ y: -20, opacity: 0 }}
               transition={{ duration: 0.5, delay: 0.1 }}
@@ -384,7 +384,7 @@ export default function IndexPage() {
                 <motion.div
                   animate={{ rotate: [0, 360] }}
                   className={`w-2 h-2 rounded-full ${
-                    theme === "light" ? "bg-orange-500" : "bg-violet-500"
+                    theme === "light" ? "bg-amber-500" : "bg-blue-500"
                   }`}
                   transition={{
                     duration: 3,
@@ -397,7 +397,7 @@ export default function IndexPage() {
 
                 <span
                   className={`text-sm font-medium ${
-                    theme === "light" ? "text-amber-800" : "text-zinc-300"
+                    theme === "light" ? "text-gray-800" : "text-gray-300"
                   }`}
                 >
                   图片处理模式
@@ -407,7 +407,7 @@ export default function IndexPage() {
               <div className="flex items-center gap-6 text-xs">
                 <div
                   className={`flex items-center gap-2 ${
-                    theme === "light" ? "text-amber-600" : "text-zinc-400"
+                    theme === "light" ? "text-gray-600" : "text-gray-400"
                   }`}
                 >
                   <span>拖拽上传</span>
@@ -415,8 +415,8 @@ export default function IndexPage() {
                   <kbd
                     className={`px-2 py-1 rounded border ${
                       theme === "light"
-                        ? "bg-orange-100 border-orange-200 text-orange-700"
-                        : "bg-zinc-800 border-zinc-700 text-zinc-300"
+                        ? "bg-gray-100 border-gray-200 text-gray-700"
+                        : "bg-gray-800 border-gray-700 text-gray-300"
                     }`}
                   >
                     Ctrl+O
@@ -425,7 +425,7 @@ export default function IndexPage() {
 
                 <div
                   className={`flex items-center gap-2 ${
-                    theme === "light" ? "text-amber-600" : "text-zinc-400"
+                    theme === "light" ? "text-gray-600" : "text-gray-400"
                   }`}
                 >
                   <span>快速处理</span>
@@ -433,8 +433,8 @@ export default function IndexPage() {
                   <kbd
                     className={`px-2 py-1 rounded border ${
                       theme === "light"
-                        ? "bg-orange-100 border-orange-200 text-orange-700"
-                        : "bg-zinc-800 border-zinc-700 text-zinc-300"
+                        ? "bg-gray-100 border-gray-200 text-gray-700"
+                        : "bg-gray-800 border-gray-700 text-gray-300"
                     }`}
                   >
                     Ctrl+Enter
