@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Button } from "@heroui/react";
 import { useTheme } from "next-themes";
@@ -12,6 +13,7 @@ import {
 
 import { ThemeSwitch } from "@/components/theme-switch";
 import Logo from "@/components/Logo";
+import { TextAnimate } from "@/components/magicui/text-animate";
 
 export default function DefaultLayout({
   children,
@@ -19,6 +21,16 @@ export default function DefaultLayout({
   children: React.ReactNode;
 }) {
   const { theme } = useTheme();
+  const [animationKey, setAnimationKey] = useState(0);
+
+  // 定时触发动画效果
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setAnimationKey((prev) => prev + 1);
+    }, 5000); // 每5秒触发一次动画
+
+    return () => clearInterval(interval);
+  }, []);
 
   return (
     <div
@@ -50,15 +62,19 @@ export default function DefaultLayout({
         >
           <div className="flex items-center gap-3">
             <Logo animated={true} size="md" />
-            <h1
-              className={`text-xl font-bold bg-gradient-to-r bg-clip-text text-transparent transition-all duration-500 ${
-                theme === "light"
-                  ? "from-amber-600 to-orange-600"
-                  : "from-blue-400 to-cyan-400"
-              }`}
+            <TextAnimate
+              key={animationKey}
+              animation="blurInUp"
+              as="h1"
+              by="character"
+              className="text-xl font-bold"
+              style={{
+                color: theme === "light" ? "#d97706" : "#60a5fa",
+                transition: "color 0.3s ease",
+              }}
             >
               PicVerter
-            </h1>
+            </TextAnimate>
           </div>
         </motion.div>
 

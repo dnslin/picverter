@@ -9,6 +9,8 @@ import ImageCropEditor from "@/components/ImageCropEditor";
 import Toast from "@/components/Toast";
 import { WailsAPI, fileToBase64, ProcessOptions } from "@/utils/wails";
 import { TextAnimate } from "@/components/magicui/text-animate";
+import { AnimatedShinyText } from "@/components/magicui/animated-shiny-text";
+import { NumberTicker } from "@/components/magicui/number-ticker";
 
 // Type definitions for react-easy-crop
 
@@ -268,17 +270,21 @@ export default function IndexPage() {
                     theme === "light" ? "text-amber-800" : "text-zinc-300"
                   }`}
                 >
-                  处理统计
+                  <TextAnimate
+                    animation="blurIn"
+                    by="word"
+                    className="text-sm font-medium"
+                  >
+                    处理统计
+                  </TextAnimate>
                 </h3>
 
                 <div className="space-y-2">
                   {[
-                    { label: "今日处理", value: "0", icon: Circle },
-
-                    { label: "总计", value: "0", icon: Triangle },
-
-                    { label: "节省空间", value: "0MB", icon: Layers },
-                  ].map(({ label, value, icon: Icon }, index) => (
+                    { label: "今日处理", value: 0, unit: "", icon: Circle },
+                    { label: "总计", value: 0, unit: "", icon: Triangle },
+                    { label: "节省空间", value: 0, unit: "MB", icon: Layers },
+                  ].map(({ label, value, unit, icon: Icon }, index) => (
                     <motion.div
                       key={label}
                       animate={{ scale: [1, 1.02, 1] }}
@@ -318,7 +324,11 @@ export default function IndexPage() {
                           theme === "light" ? "text-amber-800" : "text-zinc-300"
                         }`}
                       >
-                        {value}
+                        <NumberTicker
+                          className="text-xs font-medium"
+                          value={value}
+                        />
+                        {unit}
                       </span>
                     </motion.div>
                   ))}
@@ -333,7 +343,9 @@ export default function IndexPage() {
                     theme === "light" ? "text-amber-800" : "text-zinc-300"
                   }`}
                 >
-                  最近文件
+                  <AnimatedShinyText className="text-sm font-medium">
+                    最近文件
+                  </AnimatedShinyText>
                 </h3>
 
                 <div
@@ -478,7 +490,9 @@ export default function IndexPage() {
                     theme === "light" ? "text-amber-800" : "text-zinc-300"
                   }`}
                 >
-                  快速设置
+                  <AnimatedShinyText className="text-sm font-medium">
+                    快速设置
+                  </AnimatedShinyText>
                 </h3>
 
                 <motion.div
