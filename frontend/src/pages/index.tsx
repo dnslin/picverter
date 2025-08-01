@@ -1,6 +1,7 @@
 import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useTheme } from "next-themes";
+import { Zap, Sparkles, Layers, Triangle, Circle, Square } from "lucide-react";
 
 import DefaultLayout from "@/layouts/default";
 import ImageDropZone from "@/components/ImageDropZone";
@@ -108,90 +109,446 @@ export default function IndexPage() {
 
   return (
     <DefaultLayout>
-      <div className="flex flex-col justify-center min-h-full p-8">
-        <div className="w-full max-w-4xl mx-auto">
-          {/* Header with creative animation */}
-          <motion.div
-            animate={{ y: 0, opacity: 1 }}
-            className="text-center mb-12"
-            initial={{ y: -30, opacity: 0 }}
-            transition={{ duration: 0.8, ease: "easeOut" }}
-          >
-            <motion.h1
-              animate={{ scale: 1 }}
-              className={`text-4xl font-bold bg-gradient-to-r bg-clip-text text-transparent mb-4 transition-all duration-500 ${
-                theme === "light"
-                  ? "from-orange-600 via-amber-600 to-yellow-600"
-                  : "from-violet-400 via-purple-400 to-indigo-400"
-              }`}
-              initial={{ scale: 0.9 }}
-              transition={{
-                duration: 1,
-                delay: 0.2,
-                type: "spring",
-                stiffness: 100,
+      <div className="flex flex-col justify-center items-center min-h-screen p-8 relative overflow-hidden">
+        {/* Floating Decoration Icons */}
+        <div className="absolute inset-0 pointer-events-none">
+          {[
+            { Icon: Zap, x: "15%", y: "20%", delay: 0 },
+            { Icon: Sparkles, x: "85%", y: "25%", delay: 0.5 },
+            { Icon: Layers, x: "10%", y: "70%", delay: 1 },
+            { Icon: Triangle, x: "90%", y: "75%", delay: 1.5 },
+            { Icon: Circle, x: "20%", y: "45%", delay: 2 },
+            { Icon: Square, x: "80%", y: "55%", delay: 2.5 },
+          ].map(({ Icon, x, y, delay }, index) => (
+            <motion.div
+              key={index}
+              animate={{
+                y: [0, -20, 0],
+                rotate: [0, 5, -5, 0],
+                opacity: [0.3, 0.6, 0.3],
               }}
+              className="absolute cursor-pointer"
+              initial={{ opacity: 0, scale: 0 }}
+              style={{ left: x, top: y }}
+              transition={{
+                duration: 4 + Math.random() * 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: delay,
+              }}
+              whileHover={{
+                scale: 1.3,
+                opacity: 0.9,
+                transition: { duration: 0.2 },
+              }}
+              whileInView={{ opacity: 0.6, scale: 1 }}
             >
-              轻松裁剪，完美转换
-            </motion.h1>
-            <motion.p
+              <Icon
+                className={`w-6 h-6 transition-colors duration-1000 ${
+                  theme === "light"
+                    ? "text-orange-300/40"
+                    : "text-violet-400/30"
+                }`}
+              />
+            </motion.div>
+          ))}
+        </div>
+
+        {/* Geometric Background Elements */}
+        <div className="absolute inset-0 pointer-events-none">
+          <motion.div
+            animate={{
+              scale: [1, 1.1, 1],
+              rotate: [0, 180, 360],
+            }}
+            className={`absolute top-10 right-20 w-32 h-32 rounded-full opacity-10 ${
+              theme === "light"
+                ? "bg-gradient-to-br from-orange-400 to-amber-500"
+                : "bg-gradient-to-br from-violet-500 to-purple-600"
+            }`}
+            transition={{
+              duration: 20,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div
+            animate={{
+              scale: [1, 0.8, 1],
+              rotate: [0, -90, 0],
+            }}
+            className={`absolute bottom-20 left-16 w-24 h-24 opacity-10 ${
+              theme === "light"
+                ? "bg-gradient-to-tr from-amber-400 to-yellow-500"
+                : "bg-gradient-to-tr from-indigo-500 to-blue-600"
+            }`}
+            style={{
+              clipPath: "polygon(50% 0%, 0% 100%, 100% 100%)",
+            }}
+            transition={{
+              duration: 15,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+
+        <div className="w-full max-w-6xl mx-auto flex gap-6 justify-center items-start min-h-[80vh] relative z-10">
+          {/* Side Info Panel */}
+          <motion.div
+            animate={{ x: 0, opacity: 1 }}
+            className={`w-64 p-4 rounded-xl border transition-all duration-500 ${
+              theme === "light"
+                ? "bg-white/50 border-orange-200/50 backdrop-blur-sm"
+                : "bg-zinc-900/50 border-zinc-700/50 backdrop-blur-sm"
+            }`}
+            initial={{ x: -50, opacity: 0 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            <div className="space-y-6">
+              {/* Processing Stats */}
+              <div>
+                <h3
+                  className={`text-sm font-medium mb-3 ${
+                    theme === "light" ? "text-amber-800" : "text-zinc-300"
+                  }`}
+                >
+                  处理统计
+                </h3>
+                <div className="space-y-2">
+                  {[
+                    { label: "今日处理", value: "0", icon: Circle },
+                    { label: "总计", value: "0", icon: Triangle },
+                    { label: "节省空间", value: "0MB", icon: Layers },
+                  ].map(({ label, value, icon: Icon }, index) => (
+                    <motion.div
+                      key={label}
+                      animate={{ scale: [1, 1.02, 1] }}
+                      className={`flex items-center justify-between p-2 rounded-lg ${
+                        theme === "light" ? "bg-orange-50/50" : "bg-zinc-800/50"
+                      }`}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        delay: index * 0.5,
+                      }}
+                    >
+                      <div className="flex items-center gap-2">
+                        <Icon
+                          className={`w-3 h-3 ${
+                            theme === "light"
+                              ? "text-orange-500"
+                              : "text-violet-500"
+                          }`}
+                        />
+                        <span
+                          className={`text-xs ${
+                            theme === "light"
+                              ? "text-amber-700"
+                              : "text-zinc-400"
+                          }`}
+                        >
+                          {label}
+                        </span>
+                      </div>
+                      <span
+                        className={`text-xs font-medium ${
+                          theme === "light" ? "text-amber-800" : "text-zinc-300"
+                        }`}
+                      >
+                        {value}
+                      </span>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Recent Files */}
+              <div>
+                <h3
+                  className={`text-sm font-medium mb-3 ${
+                    theme === "light" ? "text-amber-800" : "text-zinc-300"
+                  }`}
+                >
+                  最近文件
+                </h3>
+                <div
+                  className={`p-3 rounded-lg text-center ${
+                    theme === "light" ? "bg-orange-50/50" : "bg-zinc-800/50"
+                  }`}
+                >
+                  <motion.div
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <Sparkles
+                      className={`w-6 h-6 mx-auto mb-2 ${
+                        theme === "light"
+                          ? "text-orange-400"
+                          : "text-violet-400"
+                      }`}
+                    />
+                  </motion.div>
+                  <p
+                    className={`text-xs ${
+                      theme === "light" ? "text-amber-600" : "text-zinc-400"
+                    }`}
+                  >
+                    暂无处理记录
+                  </p>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* Main Content Area */}
+          <div className="flex-1 max-w-4xl flex flex-col justify-center items-center">
+            {/* Top Status Bar */}
+            <motion.div
               animate={{ y: 0, opacity: 1 }}
-              className={`text-lg max-w-2xl mx-auto transition-colors duration-500 ${
-                theme === "light" ? "text-amber-700" : "text-zinc-400"
+              className={`w-full flex justify-between items-center p-4 rounded-xl mb-6 border transition-all duration-500 ${
+                theme === "light"
+                  ? "bg-white/60 border-orange-200/50 backdrop-blur-sm"
+                  : "bg-zinc-900/60 border-zinc-700/50 backdrop-blur-sm"
+              }`}
+              initial={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <div className="flex items-center gap-4">
+                <motion.div
+                  animate={{ rotate: [0, 360] }}
+                  className={`w-2 h-2 rounded-full ${
+                    theme === "light" ? "bg-orange-500" : "bg-violet-500"
+                  }`}
+                  transition={{
+                    duration: 3,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+                <span
+                  className={`text-sm font-medium ${
+                    theme === "light" ? "text-amber-800" : "text-zinc-300"
+                  }`}
+                >
+                  图片处理模式
+                </span>
+              </div>
+              <div className="flex items-center gap-6 text-xs">
+                <div
+                  className={`flex items-center gap-2 ${
+                    theme === "light" ? "text-amber-600" : "text-zinc-400"
+                  }`}
+                >
+                  <span>拖拽上传</span>
+                  <kbd
+                    className={`px-2 py-1 rounded border ${
+                      theme === "light"
+                        ? "bg-orange-100 border-orange-200 text-orange-700"
+                        : "bg-zinc-800 border-zinc-700 text-zinc-300"
+                    }`}
+                  >
+                    Ctrl+O
+                  </kbd>
+                </div>
+                <div
+                  className={`flex items-center gap-2 ${
+                    theme === "light" ? "text-amber-600" : "text-zinc-400"
+                  }`}
+                >
+                  <span>快速处理</span>
+                  <kbd
+                    className={`px-2 py-1 rounded border ${
+                      theme === "light"
+                        ? "bg-orange-100 border-orange-200 text-orange-700"
+                        : "bg-zinc-800 border-zinc-700 text-zinc-300"
+                    }`}
+                  >
+                    Ctrl+Enter
+                  </kbd>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Main Drop Zone */}
+            <motion.div
+              animate={{ y: 0, opacity: 1, scale: 1 }}
+              initial={{ y: 30, opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: "easeOut" }}
+            >
+              <ImageDropZone
+                className="w-full"
+                onImageSelect={handleImageSelect}
+              />
+            </motion.div>
+
+            {/* Quick Settings Panel */}
+            <motion.div
+              animate={{ y: 0, opacity: 1 }}
+              className={`w-full p-6 rounded-xl border mt-6 transition-all duration-500 ${
+                theme === "light"
+                  ? "bg-white/40 border-orange-200/50 backdrop-blur-sm"
+                  : "bg-zinc-900/40 border-zinc-700/50 backdrop-blur-sm"
               }`}
               initial={{ y: 20, opacity: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              专业级图片处理工具，支持智能裁剪、格式转换、质量优化
-            </motion.p>
-          </motion.div>
+              <div className="flex justify-between items-center mb-4">
+                <h3
+                  className={`text-sm font-medium ${
+                    theme === "light" ? "text-amber-800" : "text-zinc-300"
+                  }`}
+                >
+                  快速设置
+                </h3>
+                <motion.div
+                  animate={{ rotate: [0, 90, 0] }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
+                >
+                  <Square
+                    className={`w-3 h-3 ${
+                      theme === "light" ? "text-orange-400" : "text-violet-400"
+                    }`}
+                  />
+                </motion.div>
+              </div>
 
-          {/* Main Drop Zone */}
-          <motion.div
-            animate={{ y: 0, opacity: 1, scale: 1 }}
-            initial={{ y: 50, opacity: 0, scale: 0.95 }}
-            transition={{ duration: 0.8, delay: 0.6, ease: "easeOut" }}
-          >
-            <ImageDropZone
-              className="w-full"
-              onImageSelect={handleImageSelect}
-            />
-          </motion.div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-3">
+                  <h4
+                    className={`text-xs font-medium ${
+                      theme === "light" ? "text-amber-700" : "text-zinc-400"
+                    }`}
+                  >
+                    输出格式
+                  </h4>
+                  <div className="flex gap-2">
+                    {["JPEG", "PNG", "WEBP"].map((format) => (
+                      <motion.button
+                        key={format}
+                        className={`px-3 py-2 text-xs rounded-lg border transition-all duration-300 ${
+                          theme === "light"
+                            ? "bg-orange-50 border-orange-200 text-orange-700 hover:bg-orange-100"
+                            : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {format}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
 
-          {/* Quick Info */}
-          <motion.div
-            animate={{ y: 0, opacity: 1 }}
-            className={`mt-8 flex justify-center items-center gap-8 text-sm transition-colors duration-500 ${
-              theme === "light" ? "text-amber-600" : "text-zinc-500"
-            }`}
-            initial={{ y: 30, opacity: 0 }}
-            transition={{ duration: 0.6, delay: 0.8 }}
-          >
-            <div className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                  theme === "light" ? "bg-orange-500" : "bg-violet-500"
-                }`}
-              />
-              <span>高质量处理</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                  theme === "light" ? "bg-amber-500" : "bg-indigo-500"
-                }`}
-              />
-              <span>多格式支持</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div
-                className={`w-2 h-2 rounded-full transition-colors duration-500 ${
-                  theme === "light" ? "bg-yellow-500" : "bg-purple-500"
-                }`}
-              />
-              <span>桌面级体验</span>
-            </div>
-          </motion.div>
+                <div className="space-y-3">
+                  <h4
+                    className={`text-xs font-medium ${
+                      theme === "light" ? "text-amber-700" : "text-zinc-400"
+                    }`}
+                  >
+                    质量预设
+                  </h4>
+                  <div className="flex gap-2">
+                    {["高", "中", "快"].map((quality) => (
+                      <motion.button
+                        key={quality}
+                        className={`px-3 py-2 text-xs rounded-lg border transition-all duration-300 ${
+                          theme === "light"
+                            ? "bg-amber-50 border-amber-200 text-amber-700 hover:bg-amber-100"
+                            : "bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700"
+                        }`}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {quality}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Quick Info */}
+            <motion.div
+              animate={{ y: 0, opacity: 1 }}
+              className={`mt-8 flex justify-center items-center gap-6 text-sm transition-colors duration-500 ${
+                theme === "light" ? "text-amber-600" : "text-zinc-500"
+              }`}
+              initial={{ y: 20, opacity: 0 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+            >
+              <motion.div
+                className="flex items-center gap-2"
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.7, 1, 0.7],
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                    theme === "light" ? "bg-orange-500" : "bg-violet-500"
+                  }`}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0,
+                  }}
+                />
+                <span>高质量处理</span>
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-2"
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.7, 1, 0.7],
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                    theme === "light" ? "bg-amber-500" : "bg-indigo-500"
+                  }`}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.7,
+                  }}
+                />
+                <span>多格式支持</span>
+              </motion.div>
+              <motion.div
+                className="flex items-center gap-2"
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                whileHover={{ scale: 1.05 }}
+              >
+                <motion.div
+                  animate={{
+                    scale: [1, 1.2, 1],
+                    opacity: [0.7, 1, 0.7],
+                  }}
+                  className={`w-2 h-2 rounded-full transition-colors duration-500 ${
+                    theme === "light" ? "bg-yellow-500" : "bg-purple-500"
+                  }`}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 1.4,
+                  }}
+                />
+                <span>桌面级体验</span>
+              </motion.div>
+            </motion.div>
+          </div>
         </div>
       </div>
 
